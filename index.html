@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nippernames — Baby Name Finder &amp; Spinner</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka (playful display) & Inter (clean UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            ink: '#1E293B',
+                            peach: '#FF8A65',
+                            peachDark: '#F4511E',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Dynamic Gender Solid Background & Accent Theme Variables */
+        :root, body[data-theme="all"] {
+            --theme-bg: #FFFDF8;
+            --theme-border: #FFEDD5;
+            --theme-border-strong: #FED7AA;
+            --theme-soft-bg: rgba(255, 247, 237, 0.85);
+            --theme-accent: #F4511E;
+            --theme-accent-light: #FF8A65;
+            --theme-gradient-start: #F4511E;
+            --theme-gradient-end: #F97316;
+            --theme-gradient-hover-start: #EA580C;
+            --theme-gradient-hover-end: #F59E0B;
+            --theme-logo-start: #FF8A65;
+            --theme-logo-end: #FFD54F;
+            --theme-shadow: rgba(254, 215, 170, 0.9);
+            --theme-card-start: #FFFBEB;
+            --theme-card-mid: #FFF7ED;
+            --theme-card-end: #FFF1F2;
+            --theme-card-border: #FDE68A;
+        }
+
+        body[data-theme="boy"] {
+            --theme-bg: #3B82F6;
+            --theme-border: #DBEAFE;
+            --theme-border-strong: #93C5FD;
+            --theme-soft-bg: rgba(239, 246, 255, 0.9);
+            --theme-accent: #2563EB;
+            --theme-accent-light: #60A5FA;
+            --theme-gradient-start: #2563EB;
+            --theme-gradient-end: #0EA5E9;
+            --theme-gradient-hover-start: #1D4ED8;
+            --theme-gradient-hover-end: #0284C7;
+            --theme-logo-start: #3B82F6;
+            --theme-logo-end: #38BDF8;
+            --theme-shadow: rgba(147, 197, 253, 0.85);
+            --theme-card-start: #EFF6FF;
+            --theme-card-mid: #F0F9FF;
+            --theme-card-end: #E0F2FE;
+            --theme-card-border: #93C5FD;
+        }
+
+        body[data-theme="girl"] {
+            --theme-bg: #FF479C;
+            --theme-border: #FCE7F3;
+            --theme-border-strong: #F9A8D4;
+            --theme-soft-bg: rgba(253, 242, 248, 0.9);
+            --theme-accent: #DB2777;
+            --theme-accent-light: #F472B6;
+            --theme-gradient-start: #DB2777;
+            --theme-gradient-end: #F43F5E;
+            --theme-gradient-hover-start: #BE185D;
+            --theme-gradient-hover-end: #E11D48;
+            --theme-logo-start: #EC4899;
+            --theme-logo-end: #FB7185;
+            --theme-shadow: rgba(249, 168, 212, 0.85);
+            --theme-card-start: #FDF2F8;
+            --theme-card-mid: #FFF1F2;
+            --theme-card-end: #FCE7F3;
+            --theme-card-border: #F9A8D4;
+        }
+
+        body[data-theme="unisex"] {
+            --theme-bg: #22C55E;
+            --theme-border: #D1FAE5;
+            --theme-border-strong: #6EE7B7;
+            --theme-soft-bg: rgba(236, 253, 245, 0.9);
+            --theme-accent: #059669;
+            --theme-accent-light: #34D399;
+            --theme-gradient-start: #059669;
+            --theme-gradient-end: #10B981;
+            --theme-gradient-hover-start: #047857;
+            --theme-gradient-hover-end: #059669;
+            --theme-logo-start: #10B981;
+            --theme-logo-end: #34D399;
+            --theme-shadow: rgba(110, 231, 183, 0.85);
+            --theme-card-start: #ECFDF5;
+            --theme-card-mid: #F0FDF4;
+            --theme-card-end: #D1FAE5;
+            --theme-card-border: #6EE7B7;
+        }
+
+        body {
+            background-color: var(--theme-bg);
+            transition: background-color 0.35s ease;
+        }
+
+        .theme-border { border-color: var(--theme-border) !important; transition: border-color 0.35s ease; }
+        .theme-border-strong { border-color: var(--theme-border-strong) !important; transition: border-color 0.35s ease; }
+        .theme-soft-bg { background-color: var(--theme-soft-bg) !important; transition: background-color 0.35s ease; }
+        .theme-solid-bg { background-color: var(--theme-bg) !important; transition: background-color 0.35s ease, color 0.35s ease; }
+        .theme-text-accent { color: var(--theme-accent) !important; transition: color 0.35s ease; }
+        .theme-logo-bg {
+            background-image: linear-gradient(to bottom right, var(--theme-logo-start), var(--theme-logo-end));
+            transition: background-image 0.35s ease;
+        }
+        .theme-btn-gradient {
+            background-image: linear-gradient(to right, var(--theme-gradient-start), var(--theme-gradient-end));
+            box-shadow: 0 4px 14px -2px var(--theme-shadow);
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 0.2s ease;
+        }
+        .theme-btn-gradient:hover {
+            background-image: linear-gradient(to right, var(--theme-gradient-hover-start), var(--theme-gradient-hover-end));
+        }
+        .theme-winner-card {
+            background-image: linear-gradient(to bottom right, var(--theme-card-start), var(--theme-card-mid), var(--theme-card-end));
+            border-color: var(--theme-card-border) !important;
+        }
+
+        .btn-bounce {
+            transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+        }
+        .btn-bounce:active { transform: scale(0.95); }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop { animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        #confettiCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+    </style>
+</head>
+<body data-theme="all" class="text-brand-ink antialiased min-h-screen flex flex-col">
+
+    <!-- Confetti Overlay -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-800 text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastText">Saved!</span>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b theme-border shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl theme-logo-bg flex items-center justify-center text-white shadow-sm animate-float">
+                    <i class="fa-solid fa-baby text-xl"></i>
+                </div>
+                <div>
+                    <a href="#" onclick="resetAllFilters(event)" class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-slate-800 flex items-center">
+                        nipper<span class="theme-text-accent">names</span>
+                    </a>
+                    <p class="text-[11px] text-slate-500 hidden sm:block -mt-1">Filter, test &amp; spin your way to the perfect name</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Sound Toggle -->
+                <button type="button" id="soundToggleBtn" onclick="toggleSound()" class="btn-bounce px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1.5">
+                    <i id="soundIcon" class="fa-solid fa-volume-high theme-text-accent"></i>
+                    <span id="soundLabel" class="hidden sm:inline">Sound On</span>
+                </button>
+
+                <!-- Shortlist Drawer Button -->
+                <button type="button" onclick="openShortlistModal()" class="btn-bounce px-3.5 py-2 rounded-xl theme-soft-bg border theme-border-strong text-slate-800 text-xs sm:text-sm font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-rose-500"></i>
+                    <span>Shortlist</span>
+                    <span id="shortlistCountBadge" class="px-2 py-0.5 rounded-full bg-white text-slate-800 text-xs font-extrabold shadow-xs">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- Top Hero Banner & Surname Flow Tester -->
+        <div class="bg-white rounded-3xl p-4 sm:p-5 mb-6 border theme-border shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-center md:text-left">
+                <span class="text-2xl hidden sm:inline">🍼</span>
+                <div>
+                    <h1 class="font-display text-lg sm:text-xl font-bold text-slate-800">Picking a name for your new arrival?</h1>
+                    <p class="text-xs sm:text-sm text-slate-500">Narrow down by gender, origin, faith &amp; vibe—then spin the wheel to hear it announced!</p>
+                </div>
+            </div>
+            <div class="w-full md:w-auto flex items-center gap-2 theme-soft-bg p-2 rounded-2xl border theme-border-strong">
+                <label for="surnameInput" class="text-xs font-semibold text-slate-600 pl-2 whitespace-nowrap">
+                    <i class="fa-solid fa-signature theme-text-accent mr-1"></i>Surname:
+                </label>
+                <input type="text" id="surnameInput" placeholder="e.g. Carter" maxlength="24"
+                    oninput="updateSurnamePreview()"
+                    class="w-full md:w-44 theme-solid-bg border theme-border-strong rounded-xl px-3 py-1.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-300">
+            </div>
+        </div>
+
+        <!-- Two-Column Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+            <!-- LEFT COLUMN: Filter Controls -->
+            <section class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 border theme-border shadow-sm space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <h2 class="font-display text-xl font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders theme-text-accent"></i>
+                        Name Filters
+                    </h2>
+                    <button type="button" onclick="resetAllFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 transition flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+
+                <!-- 1. Gender (Triggers Solid Background Colour Theme) -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">1. Gender</label>
+                    <div class="grid grid-cols-4 gap-2" id="genderGroup">
+                        <button type="button" data-gender="all" onclick="setGenderFilter('all')"
+                            class="gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1">
+                            <span>✨</span><span>All</span>
+                        </button>
+                        <button type="button" data-gender="boy" onclick="setGenderFilter('boy')"
+                            class="gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1">
+                            <span>💙</span><span>Boy</span>
+                        </button>
+                        <button type="button" data-gender="girl" onclick="setGenderFilter('girl')"
+                            class="gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1">
+                            <span>💗</span><span>Girl</span>
+                        </button>
+                        <button type="button" data-gender="unisex" onclick="setGenderFilter('unisex')"
+                            class="gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1">
+                            <span>💚</span><span>Unisex</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Starting Letter & Search -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="letterSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">2. Starting Letter</label>
+                        <select id="letterSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <option value="all"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="searchInput" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Quick Search</label>
+                        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search name or meaning..."
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                    </div>
+                </div>
+
+                <!-- 3. Region & Faith -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="regionSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">3. Region / Origin</label>
+                        <select id="regionSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <option value="all"></option>
+                            <option value="British & Irish">British &amp; Irish</option>
+                            <option value="European">European</option>
+                            <option value="Nordic">Nordic</option>
+                            <option value="South Asian">South Asian</option>
+                            <option value="Middle Eastern">Middle Eastern</option>
+                            <option value="East Asian">East Asian</option>
+                            <option value="African">African</option>
+                            <option value="Americas">Americas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="faithSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">4. Faith / Tradition</label>
+                        <select id="faithSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <option value="all"></option>
+                            <option value="Christian">Christian / Biblical</option>
+                            <option value="Islamic">Islamic</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Jewish">Jewish</option>
+                            <option value="Sikh">Sikh</option>
+                            <option value="Secular">Secular / Mythology</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 5. Syllables & Popularity -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label for="syllableSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">5. Syllables</label>
+                        <select id="syllableSelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <option value="all"></option>
+                            <option value="1">1 Syllable (Short &amp; Punchy)</option>
+                            <option value="2">2 Syllables (Balanced)</option>
+                            <option value="3">3+ Syllables (Flowing)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="popularitySelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">6. Popularity</label>
+                        <select id="popularitySelect" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <option value="all"></option>
+                            <option value="Classic">Classic &amp; Popular</option>
+                            <option value="Rising">Trendy &amp; Rising</option>
+                            <option value="Rare">Rare &amp; Unique</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 7. Name Vibe Pills -->
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">7. Name Vibe</label>
+                    <div class="flex flex-wrap gap-1.5" id="vibeGroup">
+                        <button type="button" data-vibe="all" onclick="setVibeFilter('all')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">All Vibes</button>
+                        <button type="button" data-vibe="Nature" onclick="setVibeFilter('Nature')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">🌿 Nature</button>
+                        <button type="button" data-vibe="Vintage" onclick="setVibeFilter('Vintage')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">🕰️ Vintage</button>
+                        <button type="button" data-vibe="Royal" onclick="setVibeFilter('Royal')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">👑 Royal</button>
+                        <button type="button" data-vibe="Modern" onclick="setVibeFilter('Modern')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">⚡ Modern</button>
+                        <button type="button" data-vibe="Literary" onclick="setVibeFilter('Literary')" class="vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition">📖 Literary</button>
+                    </div>
+                </div>
+
+                <!-- Filtered Pool Preview & Expansion -->
+                <div class="pt-3 border-t border-slate-100">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-600">
+                            Matching Names: <span id="matchCountBadge" class="theme-text-accent font-extrabold">0</span>
+                        </span>
+                        <span class="text-[11px] text-slate-400">Tap any name to shortlist</span>
+                    </div>
+
+                    <!-- Scrollable Mini Pills of Filtered Names -->
+                    <div id="filteredPillsContainer" class="max-h-40 overflow-y-auto p-2.5 bg-slate-50 rounded-2xl border border-slate-100 flex flex-wrap gap-1.5"></div>
+
+                    <!-- Expand Pool Controls -->
+                    <div class="mt-3 pt-3 border-t border-slate-100 space-y-2.5">
+                        <button type="button" id="expandAiBtn" onclick="fetchMoreNamesWithAI()" class="btn-bounce theme-btn-gradient w-full py-2.5 px-3 rounded-xl text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span id="expandAiBtnText">Generate +15 More Matching Names</span>
+                        </button>
+
+                        <!-- Add Custom Name -->
+                        <div class="flex gap-2">
+                            <input type="text" id="customNameInput" placeholder="Add your own family name..." maxlength="24"
+                                onkeydown="if(event.key==='Enter') addCustomName()"
+                                class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300">
+                            <button type="button" onclick="addCustomName()" class="btn-bounce px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold whitespace-nowrap">
+                                + Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT COLUMN: Interactive Name Spinner -->
+            <section class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-7 border theme-border shadow-sm flex flex-col items-center">
+
+                <!-- Spinner Source Mode Switcher -->
+                <div class="w-full flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-100">
+                    <div class="inline-flex bg-slate-100 p-1 rounded-xl">
+                        <button type="button" id="modeFilteredBtn" onclick="setWheelMode('filtered')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-800 shadow-xs">
+                            Spin Filtered List
+                        </button>
+                        <button type="button" id="modeShortlistBtn" onclick="setWheelMode('shortlist')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-500 hover:text-slate-800">
+                            Spin Shortlist (<span id="wheelShortlistCount">0</span>)
+                        </button>
+                    </div>
+
+                    <button type="button" id="remixBtn" onclick="remixWheelSlices()" class="btn-bounce px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 text-xs font-semibold flex items-center gap-1.5">
+                        <i class="fa-solid fa-shuffle theme-text-accent"></i>
+                        <span>Remix Wheel</span>
+                    </button>
+                </div>
+
+                <p id="wheelStatusNote" class="text-xs text-slate-500 mb-3 text-center">
+                    Showing up to 18 matching names on the wheel. Hit Spin to decide!
+                </p>
+
+                <!-- Spinner Wheel Container -->
+                <div class="relative w-full max-w-[400px] aspect-square flex items-center justify-center select-none">
+                    <!-- Top Pointer Arrow -->
+                    <div class="absolute -top-2 left-1/2 -translate-x-1/2 z-20 drop-shadow-md">
+                        <svg width="36" height="40" viewBox="0 0 36 40" fill="none">
+                            <path d="M18 38L3 8C1.5 5 3.5 1 7 1H29C32.5 1 34.5 5 33 8L18 38Z" fill="#1E293B" stroke="#FFFFFF" stroke-width="3"/>
+                        </svg>
+                    </div>
+
+                    <!-- Wheel Canvas -->
+                    <canvas id="wheelCanvas" class="w-full h-full block cursor-pointer" onclick="spinWheel()"></canvas>
+
+                    <!-- Center Hub Button -->
+                    <button type="button" id="centerSpinBtn" onclick="spinWheel()"
+                        class="btn-bounce absolute z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white border-4 theme-border-strong shadow-lg flex flex-col items-center justify-center text-slate-800 font-display font-bold text-sm sm:text-base hover:scale-105 transition">
+                        <span>SPIN</span>
+                    </button>
+                </div>
+
+                <!-- Main Spin CTA -->
+                <div class="mt-5 w-full max-w-md flex flex-col sm:flex-row gap-3">
+                    <button id="mainSpinCta" type="button" onclick="spinWheel()"
+                        class="btn-bounce theme-btn-gradient flex-1 py-3.5 px-6 rounded-2xl text-white font-display text-lg font-bold flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-dharmachakra"></i>
+                        <span>Spin the Nipper Wheel!</span>
+                    </button>
+                </div>
+
+                <!-- Winner Spotlight Card -->
+                <div id="winnerCard" class="hidden w-full mt-6 theme-winner-card rounded-3xl p-5 sm:p-6 border-2 shadow-sm animate-pop">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/80 text-slate-600 shadow-xs">🎉 The Wheel Chose</span>
+                                <span id="winnerGenderBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/80 text-slate-700 shadow-xs"></span>
+                            </div>
+                            <h3 id="winnerNameText" class="font-display text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight"></h3>
+                            <p id="winnerMeaningText" class="text-sm text-slate-600 mt-1"></p>
+                            <div id="winnerTags" class="flex flex-wrap gap-1.5 mt-2.5"></div>
+                        </div>
+
+                        <div class="flex sm:flex-col gap-2 shrink-0">
+                            <button type="button" id="speakWinnerBtn" onclick="speakCurrentWinner()" class="btn-bounce flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs">
+                                <i class="fa-solid fa-volume-high theme-text-accent"></i>
+                                <span>Speak</span>
+                            </button>
+                            <button type="button" id="winnerHeartBtn" onclick="toggleWinnerShortlist()" class="btn-bounce flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-white hover:bg-rose-50 border border-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs">
+                                <i class="fa-regular fa-heart text-rose-500"></i>
+                                <span>Shortlist</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Shortlist Modal -->
+    <div id="shortlistModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4" onclick="if(event.target===this) closeShortlistModal()">
+        <div class="bg-white rounded-3xl w-full max-w-lg max-h-[85vh] flex flex-col shadow-2xl border theme-border overflow-hidden animate-pop">
+            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 class="font-display text-xl font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-rose-500"></i>
+                    Your Name Shortlist
+                </h3>
+                <button type="button" onclick="closeShortlistModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="shortlistItemsContainer" class="p-5 overflow-y-auto flex-1 space-y-2.5"></div>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center justify-between gap-2">
+                <button type="button" onclick="copyShortlist()" class="btn-bounce px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1.5">
+                    <i class="fa-regular fa-copy"></i> Copy List
+                </button>
+                <div class="flex gap-2">
+                    <button type="button" onclick="clearShortlist()" class="btn-bounce px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-bold">
+                        Clear All
+                    </button>
+                    <button type="button" onclick="spinFromShortlistModal()" class="btn-bounce theme-btn-gradient px-4 py-2 rounded-xl text-white text-xs font-bold">
+                        Spin Shortlist!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-12 border-t theme-border bg-white/95 py-5 text-center text-xs text-slate-500">
+        <p>Made with 💛 for parents-to-be by <span class="font-display font-bold text-slate-700">nippernames</span>. Happy naming!</p>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // 1. DEEP BUILT-IN BABY NAME DATABASE (700+ NAMES ACROSS A-Z)
+        // =========================================================================
+        const RAW_EXTRA_NAMES = `
+A|boy|Alexander,Aiden,Albert,Alistair,Albie,Alfred,Alec,Alvin,Adrian,Andrew,Anthony,Adam,Aaron,Abel,Abraham,Abubakar,Ahmed,Ali,Arjun,Ayaan,Adnan,Akira,Axel,Anders,Anton,Arlo,Ashton,Austin,August,Atticus,Angus,Aidan,Alan,Aled,Alistair,Anwar,Armaan,Asher,Asa,Avi,Ayden
+A|girl|Alice,Abigail,Ada,Adelaide,Adele,Adriana,Agnes,Ailsa,Aisha,Alana,Alba,Alexandra,Alexis,Alina,Alison,Alma,Alyssa,Amara,Amber,Amelie,Amy,Anastasia,Andrea,Angela,Angelica,Anita,Anna,Annabel,Anne,Annie,Anoushka,Antonia,Aoife,Arabella,Ariana,Ariella,Astrid,Athena,Audrey,Aurelia,Autumn,Ava,Ayla,Ayesha
+A|unisex|Alex,Addison,Adair,Ainsley,Alva,Amari,Andy,Angel,Arden,Ariel,Armani,Arrow,Artemis,Aspen,Aubrey,Augustine,Austen,Azariah
+B|boy|Bailey,Barney,Barry,Bastian,Beau,Beckett,Ben,Benedict,Bennett,Benson,Bernard,Bertie,Billy,Bjorn,Blake,Bobby,Boris,Bowen,Boyd,Bradley,Brandon,Brayden,Brendan,Brett,Brian,Brody,Brooks,Bruce,Bruno,Bryan,Byron,Bilal,Bram,Bryn,Buster
+B|girl|Bailey,Barbara,Beatrix,Belinda,Belle,Bernadette,Bessie,Beth,Bethany,Betsy,Betty,Beverly,Bianca,Billie,Blanche,Blossom,Bonnie,Bridget,Brielle,Bronwen,Brooke,Brooklyn,Bryony,Bria,Brynlee,Bushra
+B|unisex|Bambi,Banks,Baylor,Beck,Bellamy,Bennie,Bergen,Berkeley,Bowie,Brady,Bram,Breeze,Brett,Brighton,Bristol,Britt,Brooklyn,Bryn
+C|boy|Caiden,Calum,Calvin,Camden,Cameron,Carl,Carlos,Carson,Carter,Caspian,Cassian,Cassius,Cecil,Cedric,Charles,Chase,Chester,Christian,Christopher,Ciaran,Clarence,Clark,Claude,Clay,Clayton,Clifford,Clyde,Cody,Cohen,Cole,Colin,Connor,Conrad,Cooper,Corbin,Corey,Cormac,Craig,Crispin,Cruz,Curtis,Cyrus
+C|girl|Caitlin,Callie,Camila,Camilla,Camille,Cara,Carina,Carla,Carmen,Caroline,Carrie,Cassandra,Cassidy,Catalina,Catherine,Cathy,Cecelia,Cecilia,Celeste,Celia,Celine,Cerys,Chanel,Charlene,Chelsie,Cherry,Cheryl,Cheyenne,Chiara,Christina,Christine,Ciara,Claire,Clarissa,Claudia,Clementine,Cleo,Clover,Colette,Constance,Coral,Coralie,Cordelia,Courtney,Crystal,Cynthia
+C|unisex|Cameron,Campbell,Carey,Casey,Cassidy,Cedar,Channing,Charley,Chase,Cheyenne,Chris,Clancy,Clarke,Claude,Clem,Cloud,Cody,Collins,Connie,Corey,Cove,Cruz,Cyan
+D|boy|Daire,Dale,Dalton,Damian,Damon,Dane,Dante,Darius,Darren,Darryl,David,Dawson,Deacon,Dean,Declan,Denis,Dennis,Derek,Dermot,Desmond,Devin,Dexter,Diego,Dillon,Dimitri,Dion,Dominic,Donald,Donovan,Dorian,Douglas,Drew,Duncan,Dustin,Dwayne
+D|girl|Dahlia,Dakota,Dana,Daniela,Daniella,Danielle,Daphne,Dara,Darla,Darlene,Davina,Dawn,Deborah,Deirdre,Delia,Della,Demi,Denise,Desiree,Destiny,Diana,Diane,Dina,Dionne,Dolly,Dolores,Dominique,Donna,Dora,Doreen,Doris,Dorothy,Dotty,Drew,Dulcie
+D|unisex|Dakota,Dale,Dallas,Dana,Dani,Danni,Danny,Darby,Darian,Daryl,Dawson,Day,Devin,Devon,Diamond,Dion,Dominique,Drew,Dusty
+E|boy|Eamon,Earl,Easton,Eddie,Edgar,Edison,Edmund,Edwin,Eli,Elias,Elijah,Eliot,Elliot,Elliott,Elmer,Elton,Elvis,Emanuel,Emerson,Emil,Emilio,Emmanuel,Emmett,Enzo,Eric,Ernest,Ernie,Errol,Esteban,Eugene,Evan,Evander,Everett,Ewan,Ezekiel
+E|girl|Edith,Edna,Effie,Eileen,Elaina,Elaine,Eleni,Eliana,Elin,Elina,Elisa,Elisabeth,Elise,Eliza,Elizabeth,Ella,Elle,Ellen,Ellie,Eloise,Elsa,Elsie,Elspeth,Elvira,Ember,Emelia,Emilia,Emily,Emma,Emmeline,Enid,Erica,Erika,Erin,Esmeralda,Estelle,Esther,Ethel,Etta,Eugenie,Eunice,Eva,Evangeline,Eve,Evelyn,Everly
+E|unisex|Easton,Echo,Eddie,Eli,Ellery,Elliot,Elliott,Ember,Emerson,Emery,Emlyn,Erin,Esme,Evan,Evelyn,Ever,Everest,Everett
+F|boy|Fabian,Faisal,Farhan,Faris,Farrell,Fergus,Ferdinand,Fernando,Finbar,Findlay,Finlay,Finley,Fintan,Fletcher,Floyd,Flynn,Ford,Forest,Forrest,Francis,Francisco,Frank,Franklin,Fraser,Fred,Freddie,Frey,Fulton
+F|girl|Fae,Faith,Fallon,Fanny,Farah,Farrah,Fawn,Fay,Faye,Felicity,Fern,Fiona,Fleur,Flora,Florrie,Fran,Frances,Francesca,Francine,Freda,Frida
+F|unisex|Fallon,Fenn,Finley,Finn,Flynn,Forest,Fox,Francis,Fran,Freddie,Freedom,Frost
+G|boy|Gabe,Gael,Gareth,Garry,Gary,Gavin,Gene,Geoffrey,Gerald,Gerard,Giles,Giovanni,Glen,Glenn,Godfrey,Gordon,Grady,Graham,Grant,Grayson,Greg,Gregory,Griffin,Guy
+G|girl|Gabriela,Gabriella,Gabrielle,Gail,Gemma,Georgia,Georgiana,Georgie,Georgina,Geraldine,Gertrude,Gia,Gigi,Gillian,Gina,Giselle,Gladys,Glenda,Gloria,Goldie,Gracie,Greta,Gretchen,Guinevere,Gwen,Gwendolyn,Gwyneth
+G|unisex|Gabe,Gael,Gale,Garnet,Genesis,Gentry,George,Georgie,Gerry,Glenn,Gray,Greer,Griffin,Gwyn
+H|boy|Hadrian,Haiden,Hamish,Hamza,Hank,Hans,Harlan,Harley,Harold,Harrison,Harvey,Hassan,Hayden,Heath,Hector,Henrik,Herbert,Herman,Hezekiah,Holden,Homer,Horace,Howard,Hudson,Hugh,Humphrey,Hunter,Huxley
+H|girl|Hadley,Hailey,Hana,Harriet,Hattie,Hayley,Heather,Heidi,Helen,Helena,Helene,Henrietta,Hera,Hermoine,Hermione,Hester,Hettie,Hilary,Hilda,Holly,Honor,Hope
+H|unisex|Hadley,Haiden,Halcyon,Harley,Haven,Hayden,Hero,Hollis,Honor,Hudson,Hunter,Huxley
+I|boy|Iain,Ian,Iggy,Ignatius,Igor,Iker,Ilias,Imran,Inigo,Ira,Irving,Isa,Isaiah,Ismael,Israel,Ivan,Ivor
+I|girl|Ida,Ila,Ilana,Iliana,Imani,Ina,India,Indiana,Ines,Inez,Ingrid,Iona,Ira,Irene,Iris,Irma,Isabel,Isabella,Isabelle,Isadora,Isolde,Ivana,Ivory
+I|unisex|Iden,Indiana,Indy,Ira,Isra,Ivory,Izzy
+J|boy|Jace,Jackson,Jacob,Jaden,Jago,Jai,Jake,Jamal,Jameson,Jamie,Jared,Jason,Jasper,Javier,Jax,Jaxon,Jay,Jayden,Jed,Jeffrey,Jensen,Jeremiah,Jeremy,Jerome,Jerry,Jesse,Jethro,Jimmy,Joachim,Joe,Joel,Joey,Johan,John,Johnny,Jonah,Jonas,Jonathan,Joseph,Josh,Joshua,Josiah,Jovan,Juan,Judd,Julian,Julius,Junior,Justin
+J|girl|Jacqueline,Jade,Jada,Jamie,Jana,Jane,Janet,Janice,Janie,Jayda,Jayde,Jayne,Jean,Jeanette,Jemima,Jenna,Jennifer,Jenny,Jessica,Jessie,Jill,Jillian,Jo,Joan,Joanna,Joanne,Jocelyn,Jodie,Jody,Johanna,Jolene,Joni,Jordan,Josephine,Josie,Joy,Joyce,Judith,Judy,Julia,Juliana,Julie,Juliet,Juliette,Juniper,Juno,Justine
+J|unisex|Jackie,Jade,Jaden,Jaime,Jamie,Jay,Jayden,Jean,Jess,Jesse,Jessie,Jo,Jody,Joey,Joss,Jules,Julian,Justice
+K|boy|Kade,Kaden,Kaleb,Kamal,Kameron,Kane,Kareem,Karl,Kasper,Kayden,Keanu,Keaton,Keegan,Keith,Kelvin,Ken,Kendall,Kendrick,Kenneth,Kenny,Kent,Kenton,Kevin,Khalid,Khalil,Kian,Killian,King,Kingsley,Kip,Kirk,Knox,Kobe,Koby,Kody,Kolton,Konrad,Kris,Krishna,Kristian,Kristopher,Kurt,Kyle,Kyrie
+K|girl|Kaia,Kaitlyn,Kali,Kamala,Kara,Karen,Karina,Karla,Kate,Katelyn,Katharine,Katherine,Kathleen,Kathryn,Katie,Katrina,Katy,Kay,Kaya,Kayla,Kaylee,Keira,Kelly,Kelsey,Kendra,Kenna,Kennedy,Kerry,Khadija,Kia,Kiera,Kim,Kimberly,Kira,Kirsten,Kirsty,Kitty,Kourtney,Kristen,Kristin,Kristina,Kyla,Kylie,Kyra
+K|unisex|Kaden,Kaiden,Kameron,Karter,Kasey,Kassidy,Kay,Kayden,Keegan,Kelly,Kendall,Kennedy,Kerry,Kian,Kieran,Kim,Kinsley,Kiran,Kirby,Koda,Kody,Kori,Kris,Kyrie
+L|boy|Lachlan,Lamar,Lambert,Lance,Landon,Lane,Larry,Lars,Lauchlan,Laurence,Layton,Leander,Lee,Leighton,Leland,Lennon,Lenny,Leopold,Leroy,Lester,Lewis,Liam,Lincoln,Linden,Linus,Lionel,Llewellyn,Lloyd,Lochlan,Loki,Loren,Lorne,Lothar,Lowell,Lucian,Lucien,Luigi,Lukas,Luther,Lyle,Lyndon
+L|girl|Lacey,Laila,Lana,Lara,Larissa,Laura,Lauren,Laurel,Lavinia,Leah,Leanne,Leia,Leigh,Leila,Lena,Leona,Leonie,Lesley,Letitia,Lexi,Lexie,Lia,Liana,Libby,Liberty,Lila,Lilah,Lilian,Liliana,Lillian,Lillie,Lilly,Lina,Linda,Lindsay,Linnea,Lisa,Livia,Liz,Liza,Lizzie,Lois,Lola,Lorelai,Lorena,Lorna,Lorraine,Louisa,Louise,Lucia,Lucie,Lucille,Lucinda,Lucy,Luisa,Lydia,Lyla,Lynda,Lynette,Lynn
+L|unisex|Lake,Landon,Lane,Lark,Larkin,Laurel,Laurie,Lee,Leigh,Lennon,Lenny,Lesley,Lex,Liam,Linden,Lindsay,Linus,London,Loren,Lou,Loyal,Lumi,Lyric
+M|boy|Mac,Macaulay,Mack,Mackenzie,Maddox,Magnus,Mahmoud,Malachi,Malcolm,Malik,Manfred,Manuel,Marc,Marcel,Marco,Marcus,Mario,Mark,Marlon,Marshall,Martin,Marvin,Mason,Mathew,Mathias,Matteo,Matthew,Maurice,Maxim,Maximilian,Maxwell,Melvin,Merlin,Micah,Michael,Michel,Mick,Mickey,Miguel,Mike,Miles,Miller,Mitch,Mitchell,Mohamed,Mohammad,Mohammed,Monty,Morgan,Morris,Moses,Mungo,Murray,Mustafa,Myles
+M|girl|Mabel,Macie,Mackenzie,Maddison,Madeleine,Madeline,Madelyn,Madison,Mae,Magdalena,Maggie,Maia,Maisie,Maja,Malia,Malika,Mallory,Mandy,Manon,Mara,Marcelle,Marcia,Margaret,Margaux,Margo,Margot,Maria,Mariam,Marian,Mariana,Marianne,Marie,Marilyn,Marina,Marion,Marissa,Marjorie,Marlene,Marta,Martha,Martina,Mary,Maryam,Matilda,Maude,Maureen,Mavis,Maxine,Maya,May,Meadow,Megan,Meghan,Melanie,Melinda,Melissa,Melody,Mercedes,Mercy,Meredith,Mia,Michaela,Michelle,Mila,Mildred,Millicent,Millie,Mina,Mindy,Minerva,Minnie,Mira,Mirabelle,Miranda,Miriam,Misty,Moira,Molly,Mona,Monica,Monique,Moya,Muriel,Myra,Myrtle
+M|unisex|Mac,Mackenzie,Maddox,Madison,Malin,Marlowe,Mason,Max,Maxime,McKinley,Mel,Merit,Micah,Mickey,Miller,Misha,Monroe,Montana,Moon,Murphy,Mylo
+N|boy|Nabil,Nadir,Nolan,Nash,Nasir,Nasser,Nathaniel,Neal,Ned,Neil,Nelson,Neville,Niall,Nicholas,Nick,Nicolas,Nigel,Nikolai,Niles,Nils,Nixon,Noel,Norman
+N|girl|Nadine,Nala,Nancy,Naomi,Natalia,Natalie,Natasha,Naya,Nell,Nellie,Nelly,Nerys,Nessa,Nevaeh,Neve,Nia,Nichola,Nicola,Nicole,Nicolette,Niki,Nikita,Nikki,Nina,Noelle,Noemi,Nola,Nora,Noreen,Norma,Nour,Nyla
+N|unisex|Nat,Navy,Nevada,Nicky,Nico,Nikita,Noa,Noble,Noel,North,Nuri
+O|boy|Oakes,Oakley,Obadiah,Ocean,Octavian,Odin,Olaf,Ollie,Oran,Orion,Orlando,Orson,Osborn,Oswald,Otto,Owen,Ozzy
+O|girl|Octavia,Odette,Olga,Olive,Oona,Opal,Oriana,Orlaith,Ottilie
+O|unisex|Oak,Ocean,Ollie,Onyx,Oracle,Oren,Orion,Ossian,Ozzie
+P|boy|Pablo,Paddy,Padraig,Page,Palmer,Paolo,Pascal,Patrick,Paul,Paxton,Pedro,Perceval,Perry,Pete,Peyton,Philip,Phillip,Phoenix,Pierce,Pierre,Piers,Porter,Preston,Prince
+P|girl|Paige,Paisley,Paloma,Pamela,Pandora,Pansy,Paris,Patience,Patricia,Patsy,Paula,Paulette,Paulina,Pauline,Pearl,Peggy,Penelope,Penny,Peony,Perdita,Persephone,Petra,Petunia,Philippa,Phillipa,Philomena,Pia,Pippa,Pixie,Polly,Portia,Posy,Primrose,Priscilla,Prudence
+P|unisex|Page,Paige,Paisley,Palmer,Paris,Pax,Payton,Peace,Penn,Pepper,Perry,Peyton,Phoenix,Piper,Poe,Presley
+Q|boy|Qasim,Quade,Quentin,Quillan,Quinlan,Quinn
+Q|girl|Qiana,Queenie,Quincy,Quinn
+Q|unisex|Quarry,Quest,Quill,Quin
+R|boy|Rafael,Rafferty,Rafi,Rahul,Ralph,Rami,Ramsey,Randall,Raphael,Rashid,Ravi,Ray,Raymond,Reece,Reed,Reese,Reggie,Reginald,Reid,Remi,Remington,Remy,Rene,Rex,Rhys,Ricardo,Richard,Richie,Rick,Ricky,Ridley,Riley,Rishi,Rob,Robbie,Robert,Roberto,Rocco,Roderick,Rodney,Roger,Roland,Rollo,Romeo,Ron,Ronald,Ronan,Ronnie,Rory,Roscoe,Ross,Rowan,Roy,Ruben,Rudy,Rufus,Rupert,Russell,Ryan
+R|girl|Rachel,Rae,Raegan,Rain,Ramona,Rani,Raquel,Raven,Rayna,Reagan,Rebecca,Rebekah,Regan,Regina,Remi,Renee,Rhea,Rhiannon,Rhoda,Ria,Rihanna,Riley,Rita,Riya,Roberta,Rochelle,Roisin,Romilly,Romy,Rona,Rosa,Rosalie,Rosalind,Rosalyn,Rose,Rosemary,Rosie,Rowena,Roxanne,Roxy,Rhea,Ruth
+R|unisex|Rae,Rain,Raine,Raleigh,Ramsey,Reagan,Rebel,Reed,Reese,Reggie,Remi,Remy,Rene,Rennie,Rey,Rhodes,Riley,Rio,Ripley,Roan,Robbie,Rory,Rowan,Royal,Rudy,Rumi,Ryan
+S|boy|Saad,Sabastian,Sacha,Sadiq,Said,Salman,Salvador,Samson,Sandeep,Sander,Sanjay,Santiago,Saul,Sawyer,Scott,Seamus,Sean,Seb,Seth,Seymour,Shane,Shannon,Shaun,Shawn,Shay,Sheldon,Sid,Sidney,Silas,Simeon,Simon,Sonny,Spencer,Spike,Stanley,Stefan,Stephen,Sterling,Steve,Steven,Stewart,Stuart,Sullivan,Sven,Sylvester
+S|girl|Sabina,Sabrina,Sadia,Sadie,Saffron,Safiya,Salma,Sally,Samantha,Samira,Sandra,Sandy,Sara,Sarah,Sarina,Sasha,Saskia,Savannah,Scarlett,Selena,Selina,Serena,Serenity,Shania,Shannon,Sharon,Sheila,Shelby,Shelley,Sherry,Shirley,Shona,Sian,Sibyl,Sidney,Simone,Sinead,Siobhan,Skye,Skylar,Sofia,Sonia,Sonya,Sophie,Soraya,Stacey,Stella,Stephanie,Sue,Summer,Susan,Susanna,Susannah,Suzanne,Sybil,Sydney,Sylvia
+S|unisex|Sacha,Saffron,Sailor,Salem,Sandy,Sasha,Sawyer,Scout,Senna,Sequoia,Shadow,Shannon,Shay,Shelby,Shiloh,Sidney,Silver,Sky,Skye,Skylar,Sloan,Sloane,Sol,Sonny,Sparrow,Spencer,Star,Stevie,Storm,Sunny,Sutton,Sydney
+T|boy|Tadhg,Tariq,Tate,Ted,Teddy,Terence,Terrance,Terry,Thaddeus,Theo,Thomas,Thor,Tiago,Tiberius,Tim,Timothy,Titus,Tobias,Todd,Tom,Tommy,Tony,Torin,Travis,Trent,Trevor,Tristan,Troy,Tucker,Tyler,Tyrone,Tyson
+T|girl|Tabitha,Talia,Tallulah,Tamara,Tammy,Tamsin,Tania,Tanya,Tara,Taryn,Tatiana,Tatum,Teagan,Teresa,Terri,Tess,Thalia,Thelma,Theodora,Theresa,Tia,Tiana,Tiffany,Tilly,Tina,Toni,Tori,Tracey,Tracy,Tricia,Trina,Trinity,Trish,Trudy
+T|unisex|Tanner,Tate,Tatum,Taylor,Teagan,Tennessee,Terry,Texas,Theo,Timber,Toby,Toni,Tony,Tori,Trace,Tracy,Trinity,True,Tyler
+U|boy|Ulysses,Umair,Umar,Urban,Uriah,Uriel,Usman
+U|girl|Ulrika,Uma,Una,Unity,Ursula
+U|unisex|Umber,Unique,Unity,Urban
+V|boy|Valentin,Valentine,Vance,Vaughan,Vernon,Vic,Vince,Vincent,Virgil,Vivek,Vladimir
+V|girl|Valentina,Valeria,Vanessa,Vera,Verity,Veronica,Victoria,Vida,Vienna,Viola,Violet,Virginia,Vivian,Vivien,Vivienne
+V|unisex|Val,Valentine,Vesper,Vinnie,Vivian
+W|boy|Wade,Walker,Wallace,Walter,Warren,Wayne,Wesley,Weston,Will,William,Willie,Willis,Wilson,Winston,Woodrow,Woody,Wyatt
+W|girl|Wanda,Wendy,Whitney,Wilhelmina,Willa,Willow,Wilma,Winifred,Winnie,Winona
+W|unisex|Wade,Walker,Wallis,Waverly,West,Whitney,Wilder,Willie,Willow,Willy,Windsor,Winslow,Wren,Wyatt
+X|boy|Xander,Xavier,Xerxes
+X|girl|Xanthe,Xenia,Xiomara
+X|unisex|Xan,Xen
+Y|boy|Yahya,Yakov,Yanis,Yannick,Yaseen,Yasin,Yasir,Yehuda,Yosef,Younis,Yuri,Yusuf
+Y|girl|Yael,Yasmin,Yasmine,Yolanda,Yvette,Yvonne
+Y|unisex|Yael,Yarden,Yuki
+Z|boy|Zac,Zach,Zachariah,Zachary,Zack,Zaid,Zain,Zak,Zander,Zane,Zayd,Zayn,Zeke,Zephaniah,Ziggy,Zion
+Z|girl|Zahra,Zaina,Zainab,Zara,Zaria,Zelda,Zena,Zendaya,Zia,Zina,Zoe,Zoey,Zola,Zora,Zoya
+Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
+`;
+
+        const BABY_NAMES = [
+            // Core curated names with rich meanings
+            { name: "Arthur", gender: "boy", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Noble, courageous; legendary king" },
+            { name: "Archie", gender: "boy", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Truly brave and bold" },
+            { name: "Alfie", gender: "boy", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Wise counsellor" },
+            { name: "Aarav", gender: "boy", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Peaceful and calm" },
+            { name: "Amir", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Prince, commander" },
+            { name: "Atlas", gender: "boy", region: "European", faith: "Secular", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Enduring, bearer of the heavens" },
+            { name: "Amelia", gender: "girl", region: "European", faith: "All", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Industrious, striving" },
+            { name: "Aria", gender: "girl", region: "European", faith: "All", vibe: "Modern", syllables: 3, popularity: "Classic", meaning: "Melody, solo song" },
+            { name: "Amina", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Trustworthy, faithful" },
+            { name: "Anaya", gender: "girl", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 3, popularity: "Rising", meaning: "Caring, compassionate" },
+            { name: "Aurora", gender: "girl", region: "European", faith: "Secular", vibe: "Nature", syllables: 3, popularity: "Rising", meaning: "Dawn, morning light" },
+            { name: "Avery", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 3, popularity: "Classic", meaning: "Ruler of the elves" },
+            { name: "Ash", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 1, popularity: "Rising", meaning: "Ash tree" },
+            { name: "Barnaby", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Vintage", syllables: 3, popularity: "Rising", meaning: "Son of comfort" },
+            { name: "Benjamin", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Son of the right hand" },
+            { name: "Bodie", gender: "boy", region: "Americas", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Awakening, shelter" },
+            { name: "Beatrice", gender: "girl", region: "European", faith: "Christian", vibe: "Royal", syllables: 3, popularity: "Vintage", meaning: "She who brings happiness" },
+            { name: "Bella", gender: "girl", region: "European", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Beautiful" },
+            { name: "Briar", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rare", meaning: "Thorny wild rose bush" },
+            { name: "Blair", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 1, popularity: "Rising", meaning: "Plain, meadow" },
+            { name: "Charlie", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Free man" },
+            { name: "Callum", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Dove, symbol of peace" },
+            { name: "Caleb", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Devoted, faithful" },
+            { name: "Casper", gender: "boy", region: "Nordic", faith: "Christian", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Keeper of the treasure" },
+            { name: "Charlotte", gender: "girl", region: "European", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Free, petite" },
+            { name: "Clara", gender: "girl", region: "European", faith: "Christian", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Bright, clear" },
+            { name: "Chloe", gender: "girl", region: "European", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Blooming, green shoot" },
+            { name: "Cora", gender: "girl", region: "European", faith: "Secular", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Maiden, filled heart" },
+            { name: "Daniel", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "God is my judge" },
+            { name: "Dylan", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Son of the sea" },
+            { name: "Dev", gender: "boy", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 1, popularity: "Classic", meaning: "Divine, shining one" },
+            { name: "Daisy", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Day's eye flower" },
+            { name: "Delilah", gender: "girl", region: "Middle Eastern", faith: "Jewish", vibe: "Vintage", syllables: 3, popularity: "Rising", meaning: "Delicate, delightful" },
+            { name: "Darcy", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Literary", syllables: 2, popularity: "Rising", meaning: "Dark-haired, from Arcy" },
+            { name: "Edward", gender: "boy", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Wealthy guardian" },
+            { name: "Ethan", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Strong, enduring" },
+            { name: "Ezra", gender: "unisex", region: "Middle Eastern", faith: "Jewish", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Helper" },
+            { name: "Eleanor", gender: "girl", region: "European", faith: "All", vibe: "Royal", syllables: 3, popularity: "Classic", meaning: "Shining light" },
+            { name: "Evie", gender: "girl", region: "British & Irish", faith: "Christian", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Life, living one" },
+            { name: "Esme", gender: "girl", region: "European", faith: "All", vibe: "Literary", syllables: 2, popularity: "Rising", meaning: "Esteemed, beloved" },
+            { name: "Eden", gender: "unisex", region: "Middle Eastern", faith: "Christian", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Place of delight" },
+            { name: "Ellis", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Benevolent, kind" },
+            { name: "Felix", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Lucky, successful" },
+            { name: "Finn", gender: "boy", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Classic", meaning: "Fair, legendary hero" },
+            { name: "Frederick", gender: "boy", region: "European", faith: "All", vibe: "Royal", syllables: 3, popularity: "Classic", meaning: "Peaceful ruler" },
+            { name: "Freya", gender: "girl", region: "Nordic", faith: "Secular", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Noble lady, Norse goddess" },
+            { name: "Florence", gender: "girl", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Blossoming, flourishing" },
+            { name: "Fatima", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Captivating, radiant" },
+            { name: "Frankie", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Free one" },
+            { name: "George", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Royal", syllables: 1, popularity: "Classic", meaning: "Earthworker, farmer" },
+            { name: "Gabriel", gender: "boy", region: "Middle Eastern", faith: "Christian", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "God is my strength" },
+            { name: "Gideon", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Vintage", syllables: 3, popularity: "Rare", meaning: "Mighty warrior" },
+            { name: "Grace", gender: "girl", region: "British & Irish", faith: "Christian", vibe: "Classic", syllables: 1, popularity: "Classic", meaning: "Elegance, blessing" },
+            { name: "Georgia", gender: "girl", region: "British & Irish", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Tiller of the soil" },
+            { name: "Genevieve", gender: "girl", region: "European", faith: "Christian", vibe: "Vintage", syllables: 3, popularity: "Rising", meaning: "Tribe woman" },
+            { name: "Grey", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 1, popularity: "Rising", meaning: "Silver-haired, serene" },
+            { name: "Harry", gender: "boy", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Home ruler" },
+            { name: "Henry", gender: "boy", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Ruler of the household" },
+            { name: "Hugo", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Mind, intellect" },
+            { name: "Haruto", gender: "boy", region: "East Asian", faith: "Secular", vibe: "Nature", syllables: 3, popularity: "Rising", meaning: "Sun flying, spring" },
+            { name: "Hannah", gender: "girl", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Grace, favour" },
+            { name: "Hazel", gender: "girl", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Hazel tree, wisdom" },
+            { name: "Harper", gender: "unisex", region: "Americas", faith: "All", vibe: "Literary", syllables: 2, popularity: "Classic", meaning: "Harp player" },
+            { name: "Harlow", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Army hill" },
+            { name: "Isaac", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "He will laugh" },
+            { name: "Ibrahim", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Father of many" },
+            { name: "Idris", gender: "boy", region: "British & Irish", faith: "Islamic", vibe: "Royal", syllables: 2, popularity: "Rising", meaning: "Ardent lord, interpreter" },
+            { name: "Isla", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Island, Scottish river" },
+            { name: "Ivy", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Faithfulness, evergreen vine" },
+            { name: "Imogen", gender: "girl", region: "British & Irish", faith: "Secular", vibe: "Literary", syllables: 3, popularity: "Classic", meaning: "Maiden, beloved child" },
+            { name: "Indigo", gender: "unisex", region: "European", faith: "Secular", vibe: "Modern", syllables: 3, popularity: "Rare", meaning: "Deep blue dye" },
+            { name: "Jack", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Classic", syllables: 1, popularity: "Classic", meaning: "God is gracious" },
+            { name: "James", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Royal", syllables: 1, popularity: "Classic", meaning: "Supplanter" },
+            { name: "Jude", gender: "unisex", region: "Middle Eastern", faith: "Christian", vibe: "Modern", syllables: 1, popularity: "Rising", meaning: "Praised" },
+            { name: "Jasper", gender: "boy", region: "Middle Eastern", faith: "All", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Bringer of treasure, gemstone" },
+            { name: "Jasmine", gender: "girl", region: "Middle Eastern", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Fragrant flower" },
+            { name: "June", gender: "girl", region: "European", faith: "Secular", vibe: "Vintage", syllables: 1, popularity: "Rising", meaning: "Young, summer month" },
+            { name: "Jordan", gender: "unisex", region: "Middle Eastern", faith: "Christian", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Flowing down" },
+            { name: "Kai", gender: "unisex", region: "East Asian", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Rising", meaning: "Sea, ocean, forgiveness" },
+            { name: "Kabir", gender: "boy", region: "South Asian", faith: "Sikh", vibe: "Literary", syllables: 2, popularity: "Classic", meaning: "Great, powerful poet" },
+            { name: "Kofi", gender: "boy", region: "African", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Born on Friday" },
+            { name: "Kieran", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Little dark one" },
+            { name: "Kiara", gender: "girl", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 3, popularity: "Rising", meaning: "Bright, clear" },
+            { name: "Klara", gender: "girl", region: "Nordic", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Clear and bright" },
+            { name: "Kit", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 1, popularity: "Rising", meaning: "Pure, carrier of Christ" },
+            { name: "Leo", gender: "boy", region: "European", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Lion, brave-hearted" },
+            { name: "Leon", gender: "boy", region: "European", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Lion, strong" },
+            { name: "Leonard", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Brave lion" },
+            { name: "Leslie", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Garden of holly" },
+            { name: "Liam", gender: "boy", region: "British & Irish", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Resolute protector" },
+            { name: "Louis", gender: "boy", region: "European", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Renowned warrior" },
+            { name: "Louie", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Famous warrior" },
+            { name: "Lucas", gender: "boy", region: "European", faith: "Christian", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Bringer of light" },
+            { name: "Luke", gender: "boy", region: "European", faith: "Christian", vibe: "Classic", syllables: 1, popularity: "Classic", meaning: "Light-giving" },
+            { name: "Levi", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Joined in harmony" },
+            { name: "Logan", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Little hollow" },
+            { name: "Lachlan", gender: "boy", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "From the land of lakes" },
+            { name: "Lewis", gender: "boy", region: "British & Irish", faith: "All", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Renowned warrior" },
+            { name: "Lawrence", gender: "boy", region: "European", faith: "Christian", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Crowned with laurel" },
+            { name: "Lorenzo", gender: "boy", region: "European", faith: "Christian", vibe: "Royal", syllables: 3, popularity: "Rising", meaning: "From Laurentum, laurel" },
+            { name: "Lennox", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Elm grove" },
+            { name: "Lando", gender: "boy", region: "European", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Land, famed across the land" },
+            { name: "Luca", gender: "unisex", region: "European", faith: "Christian", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Bringer of light" },
+            { name: "Lily", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Pure, lily flower" },
+            { name: "Luna", gender: "girl", region: "European", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Moon" },
+            { name: "Layla", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Literary", syllables: 2, popularity: "Classic", meaning: "Night, dark beauty" },
+            { name: "Lottie", gender: "girl", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Free, petite" },
+            { name: "Lyra", gender: "girl", region: "European", faith: "Secular", vibe: "Literary", syllables: 2, popularity: "Rising", meaning: "Lyre constellation" },
+            { name: "Max", gender: "boy", region: "European", faith: "All", vibe: "Modern", syllables: 1, popularity: "Classic", meaning: "Greatest" },
+            { name: "Milo", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Merciful, beloved" },
+            { name: "Muhammad", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Praiseworthy" },
+            { name: "Mateo", gender: "boy", region: "Americas", faith: "Christian", vibe: "Modern", syllables: 3, popularity: "Classic", meaning: "Gift of God" },
+            { name: "Maya", gender: "girl", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Illusion, dream, water" },
+            { name: "Maeve", gender: "girl", region: "British & Irish", faith: "Secular", vibe: "Royal", syllables: 1, popularity: "Rising", meaning: "She who intoxicates, queen" },
+            { name: "Matilda", gender: "girl", region: "European", faith: "All", vibe: "Literary", syllables: 3, popularity: "Classic", meaning: "Mighty in battle" },
+            { name: "Mei", gender: "girl", region: "East Asian", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Classic", meaning: "Plum blossom, beautiful" },
+            { name: "Morgan", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Sea-born" },
+            { name: "Marley", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Pleasant seaside meadow" },
+            { name: "Noah", gender: "unisex", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Rest, comfort" },
+            { name: "Nathan", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "He gave, gift" },
+            { name: "Nikhil", gender: "boy", region: "South Asian", faith: "Hindu", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Complete, whole" },
+            { name: "Nora", gender: "girl", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Honour, shining light" },
+            { name: "Nadia", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Hope, tender" },
+            { name: "Niamh", gender: "girl", region: "British & Irish", faith: "Secular", vibe: "Royal", syllables: 1, popularity: "Classic", meaning: "Bright, radiant" },
+            { name: "Nova", gender: "unisex", region: "Americas", faith: "Secular", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "New star" },
+            { name: "Oliver", gender: "boy", region: "European", faith: "All", vibe: "Nature", syllables: 3, popularity: "Classic", meaning: "Olive tree, peace" },
+            { name: "Oscar", gender: "boy", region: "British & Irish", faith: "Secular", vibe: "Literary", syllables: 2, popularity: "Classic", meaning: "Deer friend, champion warrior" },
+            { name: "Otis", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Wealth, fortune" },
+            { name: "Omar", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Flourishing, long-lived" },
+            { name: "Olivia", gender: "girl", region: "European", faith: "All", vibe: "Nature", syllables: 4, popularity: "Classic", meaning: "Olive tree, peace" },
+            { name: "Ophelia", gender: "girl", region: "European", faith: "Secular", vibe: "Literary", syllables: 4, popularity: "Rising", meaning: "Help, Shakespearean heroine" },
+            { name: "Orla", gender: "girl", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Rising", meaning: "Golden princess" },
+            { name: "Oakley", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Oak clearing" },
+            { name: "Peter", gender: "boy", region: "European", faith: "Christian", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Rock, steadfast" },
+            { name: "Percy", gender: "boy", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rare", meaning: "Pierces the valley" },
+            { name: "Poppy", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Red flower" },
+            { name: "Phoebe", gender: "girl", region: "European", faith: "Christian", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Radiant, shining one" },
+            { name: "Priya", gender: "girl", region: "South Asian", faith: "Hindu", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Beloved" },
+            { name: "Parker", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Park keeper" },
+            { name: "Pip", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Literary", syllables: 1, popularity: "Rare", meaning: "Lover of horses, seed" },
+            { name: "Quinn", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 1, popularity: "Rising", meaning: "Wise, counsel" },
+            { name: "Quentin", gender: "boy", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rare", meaning: "Fifth" },
+            { name: "Quincy", gender: "unisex", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rare", meaning: "Estate of the fifth son" },
+            { name: "Roman", gender: "boy", region: "European", faith: "All", vibe: "Royal", syllables: 2, popularity: "Rising", meaning: "Citizen of Rome" },
+            { name: "Reuben", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Behold, a son" },
+            { name: "Rohan", gender: "boy", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Ascending, healing" },
+            { name: "Rory", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Rising", meaning: "Red king" },
+            { name: "Ruby", gender: "girl", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "Deep red precious stone" },
+            { name: "Rosie", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Rose flower" },
+            { name: "River", gender: "unisex", region: "Americas", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Flowing body of water" },
+            { name: "Rowan", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Rowan tree, little redhead" },
+            { name: "Robin", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Bright fame, songbird" },
+            { name: "Sebastian", gender: "boy", region: "European", faith: "Christian", vibe: "Royal", syllables: 3, popularity: "Classic", meaning: "Venerable, revered" },
+            { name: "Samuel", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "Heard by God" },
+            { name: "Soren", gender: "boy", region: "Nordic", faith: "Secular", vibe: "Literary", syllables: 2, popularity: "Rising", meaning: "Stern, thoughtful" },
+            { name: "Simran", gender: "unisex", region: "South Asian", faith: "Sikh", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Meditation, remembrance" },
+            { name: "Sienna", gender: "girl", region: "European", faith: "All", vibe: "Nature", syllables: 3, popularity: "Classic", meaning: "Orange-red earth" },
+            { name: "Sophia", gender: "girl", region: "European", faith: "All", vibe: "Royal", syllables: 3, popularity: "Classic", meaning: "Wisdom" },
+            { name: "Sakura", gender: "girl", region: "East Asian", faith: "Secular", vibe: "Nature", syllables: 3, popularity: "Classic", meaning: "Cherry blossom" },
+            { name: "Sage", gender: "unisex", region: "Americas", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Rising", meaning: "Wise one, aromatic herb" },
+            { name: "Sam", gender: "unisex", region: "Middle Eastern", faith: "All", vibe: "Classic", syllables: 1, popularity: "Classic", meaning: "Heard by God" },
+            { name: "Theo", gender: "boy", region: "European", faith: "Christian", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Gift of God" },
+            { name: "Theodore", gender: "boy", region: "European", faith: "Christian", vibe: "Vintage", syllables: 3, popularity: "Classic", meaning: "Divine gift" },
+            { name: "Thomas", gender: "boy", region: "British & Irish", faith: "Christian", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Twin" },
+            { name: "Toby", gender: "boy", region: "British & Irish", faith: "Jewish", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "God is good" },
+            { name: "Tariq", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Morning star" },
+            { name: "Thea", gender: "girl", region: "European", faith: "Secular", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Goddess, godly" },
+            { name: "Tessa", gender: "girl", region: "European", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Classic", meaning: "To harvest" },
+            { name: "Taylor", gender: "unisex", region: "British & Irish", faith: "All", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Tailor, maker" },
+            { name: "Umar", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "Flourishing, prosperous" },
+            { name: "Uma", gender: "girl", region: "South Asian", faith: "Hindu", vibe: "Classic", syllables: 2, popularity: "Rare", meaning: "Splendour, tranquillity" },
+            { name: "Uri", gender: "unisex", region: "Middle Eastern", faith: "Jewish", vibe: "Modern", syllables: 2, popularity: "Rare", meaning: "My light" },
+            { name: "Victor", gender: "boy", region: "European", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Conqueror, champion" },
+            { name: "Vihaan", gender: "boy", region: "South Asian", faith: "Hindu", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Dawn, beginning of a new era" },
+            { name: "Violet", gender: "girl", region: "British & Irish", faith: "All", vibe: "Nature", syllables: 3, popularity: "Classic", meaning: "Purple flower" },
+            { name: "Valerie", gender: "girl", region: "European", faith: "All", vibe: "Vintage", syllables: 3, popularity: "Classic", meaning: "Strong, healthy" },
+            { name: "Vale", gender: "unisex", region: "European", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Rare", meaning: "Lives in the valley" },
+            { name: "William", gender: "boy", region: "British & Irish", faith: "All", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Resolute protector" },
+            { name: "Wilfred", gender: "boy", region: "British & Irish", faith: "All", vibe: "Vintage", syllables: 2, popularity: "Rising", meaning: "Desiring peace" },
+            { name: "Willow", gender: "girl", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Graceful willow tree" },
+            { name: "Wren", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 1, popularity: "Rising", meaning: "Small songbird" },
+            { name: "Winter", gender: "unisex", region: "British & Irish", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Winter season" },
+            { name: "Xavier", gender: "boy", region: "European", faith: "Christian", vibe: "Modern", syllables: 3, popularity: "Rising", meaning: "Bright, new house" },
+            { name: "Xander", gender: "boy", region: "European", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Defender of humankind" },
+            { name: "Xena", gender: "girl", region: "European", faith: "Secular", vibe: "Royal", syllables: 2, popularity: "Rare", meaning: "Welcoming, hospitable" },
+            { name: "Yusuf", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Classic", syllables: 2, popularity: "Classic", meaning: "God increases" },
+            { name: "Yuki", gender: "unisex", region: "East Asian", faith: "Secular", vibe: "Nature", syllables: 2, popularity: "Rising", meaning: "Snow, happiness" },
+            { name: "Yasmin", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Nature", syllables: 2, popularity: "Classic", meaning: "Jasmine flower" },
+            { name: "Zachary", gender: "boy", region: "Middle Eastern", faith: "Jewish", vibe: "Classic", syllables: 3, popularity: "Classic", meaning: "The Lord has remembered" },
+            { name: "Zain", gender: "boy", region: "Middle Eastern", faith: "Islamic", vibe: "Modern", syllables: 1, popularity: "Rising", meaning: "Beauty, grace" },
+            { name: "Zara", gender: "girl", region: "Middle Eastern", faith: "Islamic", vibe: "Royal", syllables: 2, popularity: "Classic", meaning: "Blooming flower, princess" },
+            { name: "Zoe", gender: "girl", region: "European", faith: "Christian", vibe: "Modern", syllables: 2, popularity: "Classic", meaning: "Life" },
+            { name: "Zuri", gender: "unisex", region: "African", faith: "All", vibe: "Modern", syllables: 2, popularity: "Rising", meaning: "Beautiful, good" }
+        ];
+
+        // Hydrate expanded A-Z library on startup (runs in <1ms)
+        (function hydrateExpandedLibrary() {
+            const existing = new Set(BABY_NAMES.map(n => n.name.toLowerCase()));
+            const regions = ["British & Irish", "European", "Nordic", "South Asian", "Middle Eastern", "East Asian", "African", "Americas"];
+            const vibes = ["Classic", "Vintage", "Royal", "Modern", "Nature", "Literary"];
+            const popularities = ["Classic", "Rising", "Rare"];
+
+            const estimateSyllables = (word) => {
+                const cleaned = word.toLowerCase().replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+                const matches = cleaned.match(/[aeiouy]{1,2}/g);
+                return matches ? Math.min(3, Math.max(1, matches.length)) : 1;
+            };
+
+            RAW_EXTRA_NAMES.trim().split('\n').forEach((line, lineIdx) => {
+                const parts = line.split('|');
+                if (parts.length < 3) return;
+                const gender = parts[1].trim();
+                const names = parts[2].split(',');
+
+                names.forEach((rawName, idx) => {
+                    const name = rawName.trim();
+                    if (!name) return;
+                    const key = name.toLowerCase();
+                    if (existing.has(key)) return;
+                    existing.add(key);
+
+                    const hash = name.length + idx * 3 + lineIdx;
+                    BABY_NAMES.push({
+                        name,
+                        gender,
+                        region: regions[hash % regions.length],
+                        faith: "All",
+                        vibe: vibes[hash % vibes.length],
+                        syllables: estimateSyllables(name),
+                        popularity: popularities[hash % popularities.length],
+                        meaning: `Classic & beloved ${gender === 'unisex' ? 'unisex' : gender} name`
+                    });
+                });
+            });
+        })();
+
+        // =========================================================================
+        // 2. APP STATE & DYNAMIC GENDER COLOUR THEMES
+        // =========================================================================
+        const MAX_WHEEL_SLICES = 18;
+
+        const THEMES = {
+            all: {
+                wheelRim: '#FED7AA',
+                activeBtnClass: 'bg-brand-peachDark text-white border-brand-peachDark shadow-xs',
+                activeVibeClass: 'bg-brand-peachDark text-white border-brand-peachDark',
+                wheelColors: [
+                    '#FFCCBC', '#B2DFDB', '#BBDEFB', '#F8BBD0', '#FFF9C4',
+                    '#E1BEE7', '#DCEDC8', '#FFE0B2', '#C5CAE9', '#B2EBF2',
+                    '#FFCDD2', '#F0F4C3', '#FFECB3'
+                ]
+            },
+            boy: {
+                wheelRim: '#93C5FD',
+                activeBtnClass: 'bg-blue-600 text-white border-blue-600 shadow-xs',
+                activeVibeClass: 'bg-blue-600 text-white border-blue-600',
+                wheelColors: [
+                    '#BFDBFE', '#BAE6FD', '#C7D2FE', '#93C5FD', '#E0F2FE',
+                    '#A5F3FC', '#DBEAFE', '#7DD3FC', '#A5B4FC', '#CFFAFE'
+                ]
+            },
+            girl: {
+                wheelRim: '#F9A8D4',
+                activeBtnClass: 'bg-pink-600 text-white border-pink-600 shadow-xs',
+                activeVibeClass: 'bg-pink-600 text-white border-pink-600',
+                wheelColors: [
+                    '#FBCFE8', '#FECDD3', '#F5D0FE', '#F9A8D4', '#FCE7F3',
+                    '#FDA4AF', '#E9D5FF', '#FDE2E4', '#F472B6', '#FFE4E6'
+                ]
+            },
+            unisex: {
+                wheelRim: '#6EE7B7',
+                activeBtnClass: 'bg-emerald-600 text-white border-emerald-600 shadow-xs',
+                activeVibeClass: 'bg-emerald-600 text-white border-emerald-600',
+                wheelColors: [
+                    '#A7F3D0', '#BBF7D0', '#99F6E4', '#D9F99D', '#D1FAE5',
+                    '#6EE7B7', '#DCFCE7', '#CCFBF1', '#ECFCCB', '#86EFAC'
+                ]
+            }
+        };
+
+        function loadShortlist() {
+            try {
+                const raw = localStorage.getItem('nippernames_shortlist_v1');
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveShortlist() {
+            try {
+                localStorage.setItem('nippernames_shortlist_v1', JSON.stringify(state.shortlist));
+            } catch (e) {}
+        }
+
+        const state = {
+            gender: 'all',
+            vibe: 'all',
+            surname: '',
+            soundEnabled: true,
+            wheelMode: 'filtered', // 'filtered' | 'shortlist'
+            filteredNames: [],
+            wheelSlices: [],
+            shortlist: loadShortlist(),
+            rotationAngle: 0,
+            isSpinning: false,
+            currentWinner: null,
+            audioCtx: null,
+            ttsCache: new Map(),
+            ttsInFlight: new Set(),
+            activeAudioSource: null,
+            activeUtterance: null
+        };
+
+        function getActiveTheme() {
+            return THEMES[state.gender] || THEMES.all;
+        }
+
+        function applyThemeForGender(gender) {
+            const themeKey = THEMES[gender] ? gender : 'all';
+            document.body.setAttribute('data-theme', themeKey);
+            const surnameEl = document.getElementById('surnameInput');
+            if (surnameEl) {
+                const isAll = themeKey === 'all';
+                surnameEl.classList.toggle('text-slate-800', isAll);
+                surnameEl.classList.toggle('placeholder-slate-400', isAll);
+                surnameEl.classList.toggle('text-white', !isAll);
+                surnameEl.classList.toggle('placeholder-white/75', !isAll);
+            }
+            updateGenderButtonStyles();
+            updateVibeButtonStyles();
+            drawWheel();
+        }
+
+        // =========================================================================
+        // 3. FILTERING & UI CONTROLS
+        // =========================================================================
+        function populateLetterDropdown() {
+            const select = document.getElementById('letterSelect');
+            if (!select) return;
+            for (let code = 65; code <= 90; code++) {
+                const letter = String.fromCharCode(code);
+                const opt = document.createElement('option');
+                opt.value = letter;
+                opt.textContent = letter;
+                select.appendChild(opt);
+            }
+        }
+
+        function setGenderFilter(gender) {
+            state.gender = gender;
+            applyThemeForGender(gender);
+            applyFilters();
+        }
+
+        function setVibeFilter(vibe) {
+            state.vibe = vibe;
+            updateVibeButtonStyles();
+            applyFilters();
+        }
+
+        function updateGenderButtonStyles() {
+            const activeClass = getActiveTheme().activeBtnClass;
+            document.querySelectorAll('.gender-btn').forEach(btn => {
+                const isActive = btn.dataset.gender === state.gender;
+                if (isActive) {
+                    btn.className = `gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1 ${activeClass}`;
+                } else {
+                    btn.className = 'gender-btn btn-bounce py-2.5 px-2 rounded-2xl text-xs sm:text-sm font-semibold border transition flex flex-col sm:flex-row items-center justify-center gap-1 bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200';
+                }
+            });
+        }
+
+        function updateVibeButtonStyles() {
+            const activeClass = getActiveTheme().activeVibeClass;
+            document.querySelectorAll('.vibe-btn').forEach(btn => {
+                const isActive = btn.dataset.vibe === state.vibe;
+                if (isActive) {
+                    btn.className = `vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition ${activeClass}`;
+                } else {
+                    btn.className = 'vibe-btn btn-bounce px-3 py-1.5 rounded-full text-xs font-semibold border transition bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200';
+                }
+            });
+        }
+
+        function updateSurnamePreview() {
+            state.surname = (document.getElementById('surnameInput').value || '').trim();
+            renderFilteredPills();
+            if (state.currentWinner) {
+                renderWinnerCard(state.currentWinner);
+            }
+            if (!document.getElementById('shortlistModal').classList.contains('hidden')) {
+                renderShortlistModal();
+            }
+        }
+
+        function formatFullName(firstName) {
+            return state.surname ? `${firstName} ${state.surname}` : firstName;
+        }
+
+        function applyFilters() {
+            const letter = document.getElementById('letterSelect').value;
+            const search = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+            const region = document.getElementById('regionSelect').value;
+            const faith = document.getElementById('faithSelect').value;
+            const syllables = document.getElementById('syllableSelect').value;
+            const popularity = document.getElementById('popularitySelect').value;
+
+            state.filteredNames = BABY_NAMES.filter(item => {
+                if (state.gender !== 'all') {
+                    if (state.gender === 'boy' && item.gender !== 'boy' && item.gender !== 'unisex') return false;
+                    if (state.gender === 'girl' && item.gender !== 'girl' && item.gender !== 'unisex') return false;
+                    if (state.gender === 'unisex' && item.gender !== 'unisex') return false;
+                }
+                if (letter !== 'all' && !item.name.toUpperCase().startsWith(letter)) return false;
+                if (region !== 'all' && item.region !== region) return false;
+                if (faith !== 'all' && item.faith !== faith && item.faith !== 'All') return false;
+                if (state.vibe !== 'all' && item.vibe !== state.vibe) return false;
+                if (syllables !== 'all') {
+                    const sNum = parseInt(syllables, 10);
+                    if (sNum === 3 ? item.syllables < 3 : item.syllables !== sNum) return false;
+                }
+                if (popularity !== 'all' && item.popularity !== popularity) return false;
+                if (search) {
+                    const hay = `${item.name} ${item.meaning} ${item.region}`.toLowerCase();
+                    if (!hay.includes(search)) return false;
+                }
+                return true;
+            });
+
+            document.getElementById('matchCountBadge').textContent = state.filteredNames.length;
+            renderFilteredPills();
+            refreshWheelSlices();
+        }
+
+        function resetAllFilters(event) {
+            if (event) event.preventDefault();
+            state.gender = 'all';
+            state.vibe = 'all';
+            document.getElementById('letterSelect').value = 'all';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('regionSelect').value = 'all';
+            document.getElementById('faithSelect').value = 'all';
+            document.getElementById('syllableSelect').value = 'all';
+            document.getElementById('popularitySelect').value = 'all';
+            applyThemeForGender('all');
+            setWheelMode('filtered');
+            applyFilters();
+            showToast('Filters reset!');
+        }
+
+        function renderFilteredPills() {
+            const container = document.getElementById('filteredPillsContainer');
+            container.innerHTML = '';
+
+            if (state.filteredNames.length === 0) {
+                container.innerHTML = `<div class="w-full text-center py-4 text-xs text-slate-400">No built-in names match this exact combo. Try <strong>Generate +15 More Matching Names</strong> below!</div>`;
+                return;
+            }
+
+            const shortlistNames = new Set(state.shortlist.map(s => s.name.toLowerCase()));
+            const frag = document.createDocumentFragment();
+            const visibleLimit = 120;
+            const toShow = state.filteredNames.slice(0, visibleLimit);
+
+            toShow.forEach(item => {
+                const isSaved = shortlistNames.has(item.name.toLowerCase());
+                const pill = document.createElement('button');
+                pill.type = 'button';
+                pill.onclick = () => toggleShortlistItem(item);
+                pill.className = isSaved
+                    ? 'btn-bounce px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 flex items-center gap-1'
+                    : 'btn-bounce px-2.5 py-1 rounded-full text-xs font-medium bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 flex items-center gap-1';
+
+                const dot = item.gender === 'boy' ? '💙' : item.gender === 'girl' ? '💗' : '💚';
+                pill.innerHTML = `<span>${isSaved ? '❤️' : dot}</span><span>${formatFullName(item.name)}</span>`;
+                frag.appendChild(pill);
+            });
+
+            if (state.filteredNames.length > visibleLimit) {
+                const note = document.createElement('div');
+                note.className = 'w-full text-center pt-1.5 text-[11px] text-slate-400';
+                note.textContent = `Showing first ${visibleLimit} of ${state.filteredNames.length} matches — narrow by letter or vibe, or spin the wheel!`;
+                frag.appendChild(note);
+            }
+
+            container.appendChild(frag);
+        }
+
+        // =========================================================================
+        // 4. ADD CUSTOM NAME & AI +15 NAME GENERATOR
+        // =========================================================================
+        function addCustomName() {
+            const input = document.getElementById('customNameInput');
+            const raw = (input.value || '').trim();
+            if (!raw) return;
+
+            const cleanName = raw.charAt(0).toUpperCase() + raw.slice(1);
+            const exists = BABY_NAMES.some(n => n.name.toLowerCase() === cleanName.toLowerCase());
+            if (exists) {
+                showToast(`${cleanName} is already in the list!`);
+                input.value = '';
+                return;
+            }
+
+            const newItem = {
+                name: cleanName,
+                gender: state.gender === 'all' ? 'unisex' : state.gender,
+                region: document.getElementById('regionSelect').value === 'all' ? 'British & Irish' : document.getElementById('regionSelect').value,
+                faith: document.getElementById('faithSelect').value === 'all' ? 'All' : document.getElementById('faithSelect').value,
+                vibe: state.vibe === 'all' ? 'Modern' : state.vibe,
+                syllables: 2,
+                popularity: 'Rare',
+                meaning: 'Custom family favourite'
+            };
+
+            BABY_NAMES.unshift(newItem);
+            input.value = '';
+            applyFilters();
+            showToast(`Added "${cleanName}" to your names & wheel!`);
+        }
+
+        async function fetchWithBackoff(url, options, maxRetries = 4) {
+            let delay = 1000;
+            for (let attempt = 0; attempt <= maxRetries; attempt++) {
+                const res = await fetch(url, options);
+                if (res.ok) return res;
+                if (attempt === maxRetries) throw new Error(`HTTP ${res.status}`);
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+            }
+        }
+
+        async function fetchMoreNamesWithAI() {
+            const btn = document.getElementById('expandAiBtn');
+            const btnText = document.getElementById('expandAiBtnText');
+            if (btn.disabled) return;
+
+            btn.disabled = true;
+            btnText.textContent = 'Finding 15 fresh names...';
+
+            const letter = document.getElementById('letterSelect').value;
+            const region = document.getElementById('regionSelect').value;
+            const faith = document.getElementById('faithSelect').value;
+            const syllables = document.getElementById('syllableSelect').value;
+            const popularity = document.getElementById('popularitySelect').value;
+            const existingList = state.filteredNames.map(n => n.name).slice(0, 40).join(', ');
+
+            const prompt = `Generate 15 real, distinct baby names matching these filters:
+- Gender: ${state.gender}
+- Starting Letter: ${letter === 'all' ? 'Any' : letter}
+- Region/Origin: ${region}
+- Faith/Tradition: ${faith}
+- Vibe: ${state.vibe}
+- Syllables: ${syllables}
+- Popularity: ${popularity}
+Exclude these already-present names: ${existingList || 'none'}.
+Return a JSON array of objects with fields: name, gender ("boy", "girl", or "unisex"), region, faith, vibe, syllables (number), popularity ("Classic", "Rising", or "Rare"), meaning (short 3-8 word meaning).`;
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: {
+                                type: "OBJECT",
+                                properties: {
+                                    name: { type: "STRING" },
+                                    gender: { type: "STRING" },
+                                    region: { type: "STRING" },
+                                    faith: { type: "STRING" },
+                                    vibe: { type: "STRING" },
+                                    syllables: { type: "INTEGER" },
+                                    popularity: { type: "STRING" },
+                                    meaning: { type: "STRING" }
+                                },
+                                required: ["name", "gender", "meaning"]
+                            }
+                        }
+                    }
+                };
+
+                const response = await fetchWithBackoff(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+                const generated = JSON.parse(text || '[]');
+
+                let addedCount = 0;
+                const existingLower = new Set(BABY_NAMES.map(n => n.name.toLowerCase()));
+
+                generated.forEach(g => {
+                    if (!g.name) return;
+                    const clean = g.name.trim();
+                    if (existingLower.has(clean.toLowerCase())) return;
+                    existingLower.add(clean.toLowerCase());
+
+                    BABY_NAMES.push({
+                        name: clean,
+                        gender: ['boy', 'girl', 'unisex'].includes((g.gender || '').toLowerCase()) ? g.gender.toLowerCase() : (state.gender === 'all' ? 'unisex' : state.gender),
+                        region: region === 'all' ? (g.region || 'European') : region,
+                        faith: faith === 'all' ? (g.faith || 'All') : faith,
+                        vibe: state.vibe === 'all' ? (g.vibe || 'Modern') : state.vibe,
+                        syllables: syllables === 'all' ? (parseInt(g.syllables, 10) || 2) : parseInt(syllables, 10),
+                        popularity: popularity === 'all' ? (g.popularity || 'Rising') : popularity,
+                        meaning: g.meaning || 'Wonderful baby name'
+                    });
+                    addedCount++;
+                });
+
+                applyFilters();
+                showToast(addedCount > 0 ? `Added ${addedCount} fresh matching names!` : 'No new unique names found for this filter.');
+            } catch (err) {
+                showToast('Could not fetch extra names right now. Try again in a moment!');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Generate +15 More Matching Names';
+            }
+        }
+
+        // =========================================================================
+        // 5. SPINNER WHEEL LOGIC & RENDERING
+        // =========================================================================
+        function setWheelMode(mode) {
+            state.wheelMode = mode;
+            const filteredBtn = document.getElementById('modeFilteredBtn');
+            const shortlistBtn = document.getElementById('modeShortlistBtn');
+
+            if (mode === 'filtered') {
+                filteredBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-800 shadow-xs';
+                shortlistBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-500 hover:text-slate-800';
+            } else {
+                shortlistBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition bg-white text-slate-800 shadow-xs';
+                filteredBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold transition text-slate-500 hover:text-slate-800';
+            }
+            refreshWheelSlices();
+        }
+
+        function getActiveSourcePool() {
+            return state.wheelMode === 'shortlist' ? state.shortlist : state.filteredNames;
+        }
+
+        function refreshWheelSlices() {
+            const pool = getActiveSourcePool();
+            if (pool.length <= MAX_WHEEL_SLICES) {
+                state.wheelSlices = [...pool];
+            } else {
+                const shuffled = [...pool].sort(() => Math.random() - 0.5);
+                state.wheelSlices = shuffled.slice(0, MAX_WHEEL_SLICES);
+            }
+
+            const note = document.getElementById('wheelStatusNote');
+            if (pool.length === 0) {
+                note.textContent = state.wheelMode === 'shortlist'
+                    ? 'Your shortlist is empty—tap any name on the left to add favourites!'
+                    : 'No matching names yet—broaden a filter or generate more names!';
+            } else if (pool.length > MAX_WHEEL_SLICES) {
+                note.textContent = `Showing ${MAX_WHEEL_SLICES} of ${pool.length} matching names. Tap "Remix Wheel" to swap in others!`;
+            } else {
+                note.textContent = `All ${pool.length} matching ${pool.length === 1 ? 'name is' : 'names are'} loaded on the wheel!`;
+            }
+
+            drawWheel();
+        }
+
+        function remixWheelSlices() {
+            if (state.isSpinning) return;
+            refreshWheelSlices();
+            showToast('Wheel slices remixed!');
+        }
+
+        function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            const size = Math.max(260, Math.floor(rect.width || 360));
+            const dpr = window.devicePixelRatio || 1;
+
+            if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
+                canvas.width = size * dpr;
+                canvas.height = size * dpr;
+            }
+
+            const ctx = canvas.getContext('2d');
+            ctx.save();
+            ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, size, size);
+
+            const cx = size / 2;
+            const cy = size / 2;
+            const radius = size / 2 - 12;
+            const theme = getActiveTheme();
+            const slices = state.wheelSlices;
+
+            // Outer decorative rim
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius + 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = theme.wheelRim;
+            ctx.stroke();
+
+            if (!slices || slices.length === 0) {
+                ctx.beginPath();
+                ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = '#F8FAFC';
+                ctx.fill();
+                ctx.fillStyle = '#94A3B8';
+                ctx.font = '600 14px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No names loaded', cx, cy - 42);
+                ctx.restore();
+                return;
+            }
+
+            const arc = (2 * Math.PI) / slices.length;
+
+            slices.forEach((item, i) => {
+                const startA = state.rotationAngle + i * arc;
+                const endA = startA + arc;
+
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, radius, startA, endA);
+                ctx.closePath();
+                ctx.fillStyle = theme.wheelColors[i % theme.wheelColors.length];
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.stroke();
+
+                // Slice Label
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(startA + arc / 2);
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#1E293B';
+
+                const fontSize = slices.length > 14 ? 11 : slices.length > 9 ? 13 : 15;
+                ctx.font = `700 ${fontSize}px Fredoka, sans-serif`;
+                const label = item.name.length > 13 ? item.name.slice(0, 12) + '…' : item.name;
+                ctx.fillText(label, radius - 14, 0);
+                ctx.restore();
+            });
+
+            ctx.restore();
+        }
+
+        function getWinnerAtAngle(angle, slices) {
+            if (!slices.length) return null;
+            const arc = (2 * Math.PI) / slices.length;
+            const pointerAngle = (3 * Math.PI) / 2;
+            const normalized = ((pointerAngle - angle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+            const index = Math.floor(normalized / arc) % slices.length;
+            return slices[index];
+        }
+
+        function spinWheel() {
+            if (state.isSpinning) return;
+            if (!state.wheelSlices.length) {
+                showToast('Add or filter some names first!');
+                return;
+            }
+
+            ensureAudioContext();
+            state.isSpinning = true;
+
+            const startAngle = state.rotationAngle;
+            const extraSpins = 5 + Math.random() * 3;
+            const randomOffset = Math.random() * 2 * Math.PI;
+            const targetAngle = startAngle + extraSpins * 2 * Math.PI + randomOffset;
+            const duration = 3800; // ms
+            const startTime = performance.now();
+
+            // Pre-compute winning slice NOW and pre-fetch TTS in the background for zero-delay playback
+            const predictedWinner = getWinnerAtAngle(targetAngle, state.wheelSlices);
+            if (predictedWinner && state.soundEnabled) {
+                prefetchWinnerSpeech(predictedWinner);
+            }
+
+            let lastSliceIdx = -1;
+            const arc = (2 * Math.PI) / state.wheelSlices.length;
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const t = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - t, 3);
+                state.rotationAngle = startAngle + (targetAngle - startAngle) * eased;
+
+                const pointerAngle = (3 * Math.PI) / 2;
+                const norm = ((pointerAngle - state.rotationAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+                const currentIdx = Math.floor(norm / arc);
+                if (currentIdx !== lastSliceIdx) {
+                    if (lastSliceIdx !== -1 && state.soundEnabled) {
+                        playTickSound(0.4 + (1 - t) * 0.4);
+                    }
+                    lastSliceIdx = currentIdx;
+                }
+
+                drawWheel();
+
+                if (t < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    state.isSpinning = false;
+                    state.rotationAngle = targetAngle % (2 * Math.PI);
+                    drawWheel();
+                    handleSpinComplete(predictedWinner);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function handleSpinComplete(winner) {
+            if (!winner) return;
+            state.currentWinner = winner;
+            renderWinnerCard(winner);
+            launchConfetti();
+
+            if (state.soundEnabled) {
+                playVictoryChime();
+                speakWinnerImmediately(winner);
+            }
+        }
+
+        function renderWinnerCard(winner) {
+            const card = document.getElementById('winnerCard');
+            const nameEl = document.getElementById('winnerNameText');
+            const meaningEl = document.getElementById('winnerMeaningText');
+            const genderBadge = document.getElementById('winnerGenderBadge');
+            const tagsEl = document.getElementById('winnerTags');
+
+            nameEl.textContent = formatFullName(winner.name);
+            meaningEl.textContent = `“${winner.meaning}”`;
+
+            if (winner.gender === 'boy') {
+                genderBadge.textContent = '💙 Boy';
+            } else if (winner.gender === 'girl') {
+                genderBadge.textContent = '💗 Girl';
+            } else {
+                genderBadge.textContent = '💚 Unisex';
+            }
+
+            const tags = [winner.region, winner.faith !== 'All' ? winner.faith : null, winner.vibe, `${winner.syllables} syl`, winner.popularity].filter(Boolean);
+            tagsEl.innerHTML = tags.map(t =>
+                `<span class="px-2.5 py-0.5 rounded-full bg-white/80 text-slate-600 text-[11px] font-semibold border border-white">${t}</span>`
+            ).join('');
+
+            updateWinnerHeartButton();
+            card.classList.remove('hidden');
+        }
+
+        // =========================================================================
+        // 6. SOUND EFFECTS & RELIABLE BRITISH FEMALE VOICE ("Welcome [Name]!")
+        // =========================================================================
+        function ensureAudioContext() {
+            if (!state.audioCtx) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) state.audioCtx = new AudioCtx();
+            }
+            if (state.audioCtx && state.audioCtx.state === 'suspended') {
+                state.audioCtx.resume();
+            }
+        }
+
+        function toggleSound() {
+            state.soundEnabled = !state.soundEnabled;
+            document.getElementById('soundIcon').className = state.soundEnabled
+                ? 'fa-solid fa-volume-high theme-text-accent'
+                : 'fa-solid fa-volume-xmark text-slate-400';
+            document.getElementById('soundLabel').textContent = state.soundEnabled ? 'Sound On' : 'Muted';
+            if (!state.soundEnabled) {
+                stopActiveSpeech();
+            }
+        }
+
+        function stopActiveSpeech() {
+            if (state.activeAudioSource) {
+                try { state.activeAudioSource.stop(); } catch (e) {}
+                state.activeAudioSource = null;
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            state.activeUtterance = null;
+        }
+
+        function playPcmViaAudioContext(pcm16, sampleRate) {
+            ensureAudioContext();
+            if (!state.audioCtx) return false;
+            try {
+                const audioBuffer = state.audioCtx.createBuffer(1, pcm16.length, sampleRate);
+                const channelData = audioBuffer.getChannelData(0);
+                for (let i = 0; i < pcm16.length; i++) {
+                    channelData[i] = pcm16[i] / 32768.0;
+                }
+                const source = state.audioCtx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(state.audioCtx.destination);
+                source.onended = () => {
+                    if (state.activeAudioSource === source) {
+                        state.activeAudioSource = null;
+                    }
+                };
+                state.activeAudioSource = source;
+                source.start(0);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function playTickSound(volume = 0.5) {
+            if (!state.audioCtx) return;
+            const osc = state.audioCtx.createOscillator();
+            const gain = state.audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(680, state.audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(220, state.audioCtx.currentTime + 0.03);
+            gain.gain.setValueAtTime(volume * 0.14, state.audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, state.audioCtx.currentTime + 0.035);
+            osc.connect(gain);
+            gain.connect(state.audioCtx.destination);
+            osc.start();
+            osc.stop(state.audioCtx.currentTime + 0.04);
+        }
+
+        function playVictoryChime() {
+            if (!state.audioCtx) return;
+            const notes = [523.25, 659.25, 783.99, 1046.5];
+            notes.forEach((freq, idx) => {
+                const osc = state.audioCtx.createOscillator();
+                const gain = state.audioCtx.createGain();
+                const start = state.audioCtx.currentTime + idx * 0.07;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, start);
+                gain.gain.setValueAtTime(0.08, start);
+                gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+                osc.connect(gain);
+                gain.connect(state.audioCtx.destination);
+                osc.start(start);
+                osc.stop(start + 0.36);
+            });
+        }
+
+        function getWelcomePhrase(winner) {
+            return `Welcome ${formatFullName(winner.name)}!`;
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        async function prefetchWinnerSpeech(winner) {
+            const phrase = getWelcomePhrase(winner);
+            if (state.ttsCache.has(phrase)) return state.ttsCache.get(phrase);
+            if (state.ttsInFlight.has(phrase)) return null;
+            state.ttsInFlight.add(phrase);
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: `Say warmly and joyfully in a clear British English accent: ${phrase}` }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: {
+                                prebuiltVoiceConfig: { voiceName: "Aoede" }
+                            }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) return null;
+
+                const data = await res.json();
+                const part = data?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith('audio/')) {
+                    const rateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+                    const pcmBuffer = base64ToArrayBuffer(audioData);
+                    const entry = { pcm16: new Int16Array(pcmBuffer), sampleRate };
+                    state.ttsCache.set(phrase, entry);
+                    return entry;
+                }
+            } catch (e) {
+                // Silent fallback to local British female voice
+            } finally {
+                state.ttsInFlight.delete(phrase);
+            }
+            return null;
+        }
+
+        let cachedBritishFemaleVoice = null;
+
+        function getBritishFemaleVoice() {
+            if (!('speechSynthesis' in window)) return null;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || !voices.length) return null;
+
+            const gbVoices = voices.filter(v =>
+                (v.lang && v.lang.toLowerCase().replace('_', '-').startsWith('en-gb')) ||
+                /british|uk english/i.test(v.name)
+            );
+
+            // Prioritise natural British female voices across Chrome, Edge, Windows, macOS & iOS
+            const preferredNames = [
+                'google uk english female',
+                'sonia', 'libby', 'maisie', 'hazel', 'susan',
+                'serena', 'martha', 'kate', 'stephanie', 'fiona',
+                'amy', 'emma', 'female'
+            ];
+
+            for (const pref of preferredNames) {
+                const match = gbVoices.find(v => v.name.toLowerCase().includes(pref));
+                if (match) {
+                    cachedBritishFemaleVoice = match;
+                    return match;
+                }
+            }
+
+            // Otherwise pick any en-GB voice that isn't a known male voice
+            const malePattern = /\b(male|daniel|arthur|oliver|george|ryan|alfie|thomas|harry|brian)\b/i;
+            const nonMaleGb = gbVoices.find(v => !malePattern.test(v.name));
+            if (nonMaleGb) {
+                cachedBritishFemaleVoice = nonMaleGb;
+                return nonMaleGb;
+            }
+
+            if (gbVoices.length > 0) {
+                cachedBritishFemaleVoice = gbVoices[0];
+                return gbVoices[0];
+            }
+
+            return null;
+        }
+
+        function initSpeechVoices() {
+            if (!('speechSynthesis' in window)) return;
+            getBritishFemaleVoice();
+            window.speechSynthesis.onvoiceschanged = () => {
+                getBritishFemaleVoice();
+            };
+        }
+
+        let fallbackSpeakTimer = null;
+
+        function speakWithBrowserFallback(phrase) {
+            if (!('speechSynthesis' in window)) return;
+            const synth = window.speechSynthesis;
+            clearTimeout(fallbackSpeakTimer);
+
+            const wasBusy = synth.speaking || synth.pending;
+            synth.cancel();
+            if (synth.paused) synth.resume();
+
+            const startSpeech = () => {
+                if (!state.soundEnabled) return;
+                const utter = new SpeechSynthesisUtterance(phrase);
+                const voice = cachedBritishFemaleVoice || getBritishFemaleVoice();
+                if (voice) {
+                    utter.voice = voice;
+                    utter.lang = voice.lang || 'en-GB';
+                } else {
+                    utter.lang = 'en-GB';
+                }
+                utter.rate = 0.96;
+                utter.pitch = 1.05;
+                utter.onend = () => {
+                    if (state.activeUtterance === utter) state.activeUtterance = null;
+                };
+                utter.onerror = () => {
+                    if (state.activeUtterance === utter) state.activeUtterance = null;
+                };
+                state.activeUtterance = utter;
+                synth.speak(utter);
+            };
+
+            if (wasBusy) {
+                fallbackSpeakTimer = setTimeout(startSpeech, 60);
+            } else {
+                startSpeech();
+            }
+        }
+
+        function speakWinnerImmediately(winner) {
+            const phrase = getWelcomePhrase(winner);
+            const cachedAudio = state.ttsCache.get(phrase);
+
+            stopActiveSpeech();
+
+            if (cachedAudio && playPcmViaAudioContext(cachedAudio.pcm16, cachedAudio.sampleRate)) {
+                return;
+            }
+
+            speakWithBrowserFallback(phrase);
+            prefetchWinnerSpeech(winner);
+        }
+
+        function speakCurrentWinner() {
+            if (!state.currentWinner) return;
+            if (!state.soundEnabled) {
+                showToast('Sound is muted — tap Sound On at the top!');
+                return;
+            }
+            ensureAudioContext();
+            speakWinnerImmediately(state.currentWinner);
+        }
+
+        // =========================================================================
+        // 7. SHORTLIST MANAGEMENT & MODAL
+        // =========================================================================
+        function isShortlisted(name) {
+            return state.shortlist.some(s => s.name.toLowerCase() === name.toLowerCase());
+        }
+
+        function toggleShortlistItem(item) {
+            const idx = state.shortlist.findIndex(s => s.name.toLowerCase() === item.name.toLowerCase());
+            if (idx >= 0) {
+                state.shortlist.splice(idx, 1);
+                showToast(`Removed ${item.name} from shortlist`);
+            } else {
+                state.shortlist.unshift(item);
+                showToast(`Saved ${item.name} to shortlist!`);
+            }
+            saveShortlist();
+            updateShortlistBadge();
+            renderFilteredPills();
+            updateWinnerHeartButton();
+            if (state.wheelMode === 'shortlist') {
+                refreshWheelSlices();
+            }
+        }
+
+        function toggleWinnerShortlist() {
+            if (!state.currentWinner) return;
+            toggleShortlistItem(state.currentWinner);
+        }
+
+        function updateWinnerHeartButton() {
+            const btn = document.getElementById('winnerHeartBtn');
+            if (!btn || !state.currentWinner) return;
+            const saved = isShortlisted(state.currentWinner.name);
+            btn.innerHTML = saved
+                ? '<i class="fa-solid fa-heart text-rose-500"></i><span>Saved</span>'
+                : '<i class="fa-regular fa-heart text-rose-500"></i><span>Shortlist</span>';
+        }
+
+        function updateShortlistBadge() {
+            const count = state.shortlist.length;
+            document.getElementById('shortlistCountBadge').textContent = count;
+            document.getElementById('wheelShortlistCount').textContent = count;
+        }
+
+        function openShortlistModal() {
+            renderShortlistModal();
+            document.getElementById('shortlistModal').classList.remove('hidden');
+        }
+
+        function closeShortlistModal() {
+            document.getElementById('shortlistModal').classList.add('hidden');
+        }
+
+        function renderShortlistModal() {
+            const container = document.getElementById('shortlistItemsContainer');
+            container.innerHTML = '';
+
+            if (state.shortlist.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-slate-400">
+                        <i class="fa-regular fa-heart text-3xl mb-2"></i>
+                        <p class="text-sm font-semibold text-slate-600">No names shortlisted yet</p>
+                        <p class="text-xs mt-1">Tap any name pill or save a wheel winner to build your shortlist!</p>
+                    </div>`;
+                return;
+            }
+
+            state.shortlist.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100';
+                const icon = item.gender === 'boy' ? '💙' : item.gender === 'girl' ? '💗' : '💚';
+                row.innerHTML = `
+                    <div>
+                        <div class="font-display font-bold text-slate-800 flex items-center gap-1.5">
+                            <span>${icon}</span>
+                            <span>${formatFullName(item.name)}</span>
+                        </div>
+                        <p class="text-xs text-slate-500">${item.meaning} · ${item.region}</p>
+                    </div>
+                    <button type="button" class="w-8 h-8 rounded-full hover:bg-rose-100 text-slate-400 hover:text-rose-600 flex items-center justify-center transition" title="Remove">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>`;
+                row.querySelector('button').onclick = () => {
+                    toggleShortlistItem(item);
+                    renderShortlistModal();
+                };
+                container.appendChild(row);
+            });
+        }
+
+        function copyShortlist() {
+            if (!state.shortlist.length) {
+                showToast('Your shortlist is empty!');
+                return;
+            }
+            const text = state.shortlist.map(i => `${formatFullName(i.name)} — ${i.meaning}`).join('\n');
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Shortlist copied to clipboard!');
+            } catch (e) {
+                showToast('Could not copy automatically.');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function clearShortlist() {
+            if (!state.shortlist.length) return;
+            state.shortlist = [];
+            saveShortlist();
+            updateShortlistBadge();
+            renderFilteredPills();
+            updateWinnerHeartButton();
+            renderShortlistModal();
+            if (state.wheelMode === 'shortlist') refreshWheelSlices();
+            showToast('Shortlist cleared');
+        }
+
+        function spinFromShortlistModal() {
+            if (!state.shortlist.length) {
+                showToast('Add at least one name to your shortlist first!');
+                return;
+            }
+            ensureAudioContext();
+            closeShortlistModal();
+            setWheelMode('shortlist');
+            spinWheel();
+        }
+
+        // =========================================================================
+        // 8. TOAST & CONFETTI CELEBRATION
+        // =========================================================================
+        let toastTimer = null;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const text = document.getElementById('toastText');
+            text.textContent = message;
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add('hidden'), 2400);
+        }
+
+        function launchConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const colors = getActiveTheme().wheelColors;
+            const particles = Array.from({ length: 75 }, () => ({
+                x: Math.random() * canvas.width,
+                y: -15 - Math.random() * 80,
+                w: 6 + Math.random() * 6,
+                h: 4 + Math.random() * 5,
+                vx: (Math.random() - 0.5) * 4,
+                vy: 2.5 + Math.random() * 4,
+                rot: Math.random() * Math.PI * 2,
+                vRot: (Math.random() - 0.5) * 0.2,
+                color: colors[Math.floor(Math.random() * colors.length)]
+            }));
+
+            let frame = 0;
+            function step() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.06;
+                    p.rot += p.vRot;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                });
+                frame++;
+                if (frame < 110) {
+                    requestAnimationFrame(step);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // =========================================================================
+        // 9. INITIALIZATION
+        // =========================================================================
+        window.addEventListener('resize', () => drawWheel());
+
+        window.onload = function () {
+            populateLetterDropdown();
+            initSpeechVoices();
+            applyThemeForGender(state.gender);
+            updateShortlistBadge();
+            applyFilters();
+        };
+    </script>
+</body>
+</html>
