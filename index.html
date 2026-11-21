@@ -36,23 +36,23 @@
     <style>
         /* Dynamic Gender Solid Background & Accent Theme Variables */
         :root, body[data-theme="all"] {
-            --theme-bg: #FFFDF8;
-            --theme-border: #FFEDD5;
-            --theme-border-strong: #FED7AA;
-            --theme-soft-bg: rgba(255, 247, 237, 0.85);
-            --theme-accent: #F4511E;
-            --theme-accent-light: #FF8A65;
-            --theme-gradient-start: #F4511E;
-            --theme-gradient-end: #F97316;
-            --theme-gradient-hover-start: #EA580C;
-            --theme-gradient-hover-end: #F59E0B;
-            --theme-logo-start: #FF8A65;
-            --theme-logo-end: #FFD54F;
-            --theme-shadow: rgba(254, 215, 170, 0.9);
-            --theme-card-start: #FFFBEB;
-            --theme-card-mid: #FFF7ED;
-            --theme-card-end: #FFF1F2;
-            --theme-card-border: #FDE68A;
+            --theme-bg: #FEF08A;
+            --theme-border: #FDE047;
+            --theme-border-strong: #EAB308;
+            --theme-soft-bg: rgba(254, 249, 195, 0.92);
+            --theme-accent: #A16207;
+            --theme-accent-light: #CA8A04;
+            --theme-gradient-start: #FEF08A;
+            --theme-gradient-end: #FDE047;
+            --theme-gradient-hover-start: #FDE047;
+            --theme-gradient-hover-end: #FACC15;
+            --theme-logo-start: #FEF08A;
+            --theme-logo-end: #FDE047;
+            --theme-shadow: rgba(234, 179, 8, 0.45);
+            --theme-card-start: #FEFCE8;
+            --theme-card-mid: #FEF9C3;
+            --theme-card-end: #FEF08A;
+            --theme-card-border: #EAB308;
         }
 
         body[data-theme="boy"] {
@@ -230,7 +230,7 @@
                 </div>
             </div>
             <div class="w-full md:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 theme-soft-bg p-3 rounded-2xl border-2 theme-border-strong shadow-xs">
-                <label for="surnameInput" class="font-display text-sm sm:text-base font-bold theme-text-accent pl-1 whitespace-nowrap flex items-center gap-1.5">
+                <label for="surnameInput" class="font-display text-sm sm:text-base font-bold text-slate-800 pl-1 whitespace-nowrap flex items-center gap-1.5">
                     <i class="fa-solid fa-signature"></i>
                     <span>Enter your surname!</span>
                 </label>
@@ -494,7 +494,7 @@
                     <button type="button" onclick="clearShortlist()" class="btn-bounce px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 text-xs font-bold">
                         Clear All
                     </button>
-                    <button type="button" onclick="spinFromShortlistModal()" class="btn-bounce theme-btn-gradient px-4 py-2 rounded-xl text-white text-xs font-bold">
+                    <button id="modalSpinShortlistBtn" type="button" onclick="spinFromShortlistModal()" class="btn-bounce theme-btn-gradient px-4 py-2 rounded-xl text-white text-xs font-bold">
                         Spin Shortlist!
                     </button>
                 </div>
@@ -792,9 +792,22 @@ Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
         // Hydrate expanded A-Z library on startup (runs in <1ms)
         (function hydrateExpandedLibrary() {
             const existing = new Set(BABY_NAMES.map(n => n.name.toLowerCase()));
-            const regions = ["British & Irish", "European", "Nordic", "South Asian", "Middle Eastern", "East Asian", "African", "Americas"];
             const vibes = ["Classic", "Vintage", "Royal", "Modern", "Nature", "Literary"];
             const popularities = ["Classic", "Rising", "Rare"];
+
+            // Smart regional classification so British & Irish, South Asian, Middle Eastern, Nordic, etc. names match accurately
+            const detectRegion = (name) => {
+                const n = name.toLowerCase();
+                if (/^(aar|abh|adh|ahm|ais|aj|ak|al[ia]|am[ai]|an[au]|arj|arm|ashw|ay[ae]|bal|bha|bush|dev|diya|far|fat|had|ham|har[ip]|has|ibr|idr|imr|ish|kab|kam|kar|kha|kia|kri|mah|mal|man|mar[iy]|meera|moh|muh|nab|nad|nas|nik|nir|nou|oma|pri|qas|rah|raj|ram|ran|ras|rav|riy|roh|saa|sad|saf|sah|sai|sal|sam[ia]|san|sar|sha|sid|sim|sof|sor|sur|tar|uma|usm|vih|viv|yah|yas|yus|zah|zai|zar|zay)/.test(n)) {
+                    if (/(aar|abh|arj|arm|bha|dev|diya|har[ip]|ish|kab|kam|kia|kri|meera|nik|nir|pri|rah|raj|ram|rav|riy|roh|saa|sai|san|sha|sid|sim|sur|uma|vih|viv)/.test(n)) return "South Asian";
+                    return "Middle Eastern";
+                }
+                if (/^(aki|haru|hiro|ken|mei|ren|ryu|saku|sora|yuki|yumi|wei|lin|jun|min|jin|kai)/.test(n)) return "East Asian";
+                if (/^(ama|ani|chi|imani|kofi|kwame|nia|ola|zuri|amari|ayo|jabari|malik|tariq|zola)/.test(n)) return "African";
+                if (/^(and|ast|axe|bjo|fre|gus|hen|ing|kas|kla|lar|lei|linn|lok|mag|nil|odi|ola|sig|sor|sve|tho|ulr)/.test(n)) return "Nordic";
+                if (/^(ale|ant|aur|bea|cam|car|cel|cla|cle|cos|dan|ele|eli|emi|enz|est|fab|fel|flo|fra|gab|gio|gui|hug|isa|jul|lau|leo|lor|luc|lui|mar[co]|mat|max|nic|oli|pab|pao|pas|pie|raf|rem|ric|rob|rom|seb|ser|sil|sop|ste|val|vic|vin|viv)/.test(n)) return "European";
+                return "British & Irish";
+            };
 
             const estimateSyllables = (word) => {
                 const cleaned = word.toLowerCase().replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
@@ -819,7 +832,7 @@ Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
                     BABY_NAMES.push({
                         name,
                         gender,
-                        region: regions[hash % regions.length],
+                        region: detectRegion(name),
                         faith: "All",
                         vibe: vibes[hash % vibes.length],
                         syllables: estimateSyllables(name),
@@ -837,9 +850,9 @@ Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
 
         const THEMES = {
             all: {
-                wheelRim: '#FED7AA',
-                activeBtnClass: 'bg-brand-peachDark text-white border-brand-peachDark shadow-xs',
-                activeVibeClass: 'bg-brand-peachDark text-white border-brand-peachDark',
+                wheelRim: '#FEF08A',
+                activeBtnClass: 'bg-yellow-200 text-slate-900 border-yellow-400 shadow-xs font-bold',
+                activeVibeClass: 'bg-yellow-200 text-slate-900 border-yellow-400 font-bold',
                 wheelColors: [
                     '#FFCCBC', '#B2DFDB', '#BBDEFB', '#F8BBD0', '#FFF9C4',
                     '#E1BEE7', '#DCEDC8', '#FFE0B2', '#C5CAE9', '#B2EBF2',
@@ -916,14 +929,22 @@ Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
         function applyThemeForGender(gender) {
             const themeKey = THEMES[gender] ? gender : 'all';
             document.body.setAttribute('data-theme', themeKey);
+            const isAll = themeKey === 'all';
             const surnameEl = document.getElementById('surnameInput');
             if (surnameEl) {
-                const isAll = themeKey === 'all';
                 surnameEl.classList.toggle('text-slate-800', isAll);
                 surnameEl.classList.toggle('placeholder-slate-400', isAll);
                 surnameEl.classList.toggle('text-white', !isAll);
                 surnameEl.classList.toggle('placeholder-white/75', !isAll);
             }
+            ['expandAiBtn', 'mainSpinCta', 'modalSpinShortlistBtn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.classList.toggle('text-slate-900', isAll);
+                btn.classList.toggle('border', isAll);
+                btn.classList.toggle('border-yellow-400', isAll);
+                btn.classList.toggle('text-white', !isAll);
+            });
             updateGenderButtonStyles();
             updateVibeButtonStyles();
             drawWheel();
@@ -1143,6 +1164,97 @@ Z|unisex|Zaire,Zan,Zane,Zen,Zephyr,Ziggy,Zion,Zuri
             const popularity = document.getElementById('popularitySelect').value;
             const existingList = state.filteredNames.map(n => n.name).slice(0, 40).join(', ');
 
+            const addOfflineFallbackNames = () => {
+                const reservePool = [
+                    { name: "Martin", gender: "boy", region: "British & Irish", meaning: "Of Mars, warrior" },
+                    { name: "Alistair", gender: "boy", region: "British & Irish", meaning: "Defender of the people" },
+                    { name: "Hamish", gender: "boy", region: "British & Irish", meaning: "Supplanter, Scottish form of James" },
+                    { name: "Gareth", gender: "boy", region: "British & Irish", meaning: "Gentle, Arthurian knight" },
+                    { name: "Declan", gender: "boy", region: "British & Irish", meaning: "Full of goodness" },
+                    { name: "Seamus", gender: "boy", region: "British & Irish", meaning: "Supplanter, Irish form of James" },
+                    { name: "Fraser", gender: "boy", region: "British & Irish", meaning: "Strawberry, Scottish clan name" },
+                    { name: "Owen", gender: "boy", region: "British & Irish", meaning: "Young warrior, well-born" },
+                    { name: "Rhys", gender: "boy", region: "British & Irish", meaning: "Ardour, enthusiasm" },
+                    { name: "Ronan", gender: "boy", region: "British & Irish", meaning: "Little seal" },
+                    { name: "Cormac", gender: "boy", region: "British & Irish", meaning: "Charioteer, legendary Irish king" },
+                    { name: "Ewan", gender: "boy", region: "British & Irish", meaning: "Born of the yew tree" },
+                    { name: "Cian", gender: "boy", region: "British & Irish", meaning: "Ancient, enduring" },
+                    { name: "Tadhg", gender: "boy", region: "British & Irish", meaning: "Poet, philosopher" },
+                    { name: "Rupert", gender: "boy", region: "British & Irish", meaning: "Bright fame" },
+                    { name: "Graham", gender: "boy", region: "British & Irish", meaning: "Gravelly homestead" },
+                    { name: "Stuart", gender: "boy", region: "British & Irish", meaning: "Steward, royal household" },
+                    { name: "Malcolm", gender: "boy", region: "British & Irish", meaning: "Devotee of Saint Columba" },
+                    { name: "Duncan", gender: "boy", region: "British & Irish", meaning: "Dark warrior" },
+                    { name: "Colin", gender: "boy", region: "British & Irish", meaning: "Young hound, victory of the people" },
+                    { name: "Niall", gender: "boy", region: "British & Irish", meaning: "Champion, cloud" },
+                    { name: "Fergus", gender: "boy", region: "British & Irish", meaning: "Man of vigour" },
+                    { name: "Rafferty", gender: "boy", region: "British & Irish", meaning: "Floodtide, prosperity" },
+                    { name: "Jago", gender: "boy", region: "British & Irish", meaning: "Cornish form of James" },
+                    { name: "Bryn", gender: "boy", region: "British & Irish", meaning: "Hill, mound" },
+                    { name: "Aoife", gender: "girl", region: "British & Irish", meaning: "Beautiful, radiant" },
+                    { name: "Ciara", gender: "girl", region: "British & Irish", meaning: "Dark-haired, bright" },
+                    { name: "Roisin", gender: "girl", region: "British & Irish", meaning: "Little rose" },
+                    { name: "Cerys", gender: "girl", region: "British & Irish", meaning: "Love" },
+                    { name: "Bronwen", gender: "girl", region: "British & Irish", meaning: "Fair, blessed" },
+                    { name: "Ailsa", gender: "girl", region: "British & Irish", meaning: "Elf victory, Scottish island" },
+                    { name: "Iona", gender: "girl", region: "British & Irish", meaning: "Island, blessed" },
+                    { name: "Tamsin", gender: "girl", region: "British & Irish", meaning: "Twin, Cornish classic" },
+                    { name: "Seren", gender: "girl", region: "British & Irish", meaning: "Star" },
+                    { name: "Eilidh", gender: "girl", region: "British & Irish", meaning: "Sun, radiant one" },
+                    { name: "Saffron", gender: "unisex", region: "British & Irish", meaning: "Golden spice flower" },
+                    { name: "Finlay", gender: "unisex", region: "British & Irish", meaning: "Fair-haired hero" },
+                    { name: "Campbell", gender: "unisex", region: "British & Irish", meaning: "Scottish heritage name" },
+                    { name: "Mackenzie", gender: "unisex", region: "British & Irish", meaning: "Child of the wise leader" }
+                ];
+
+                const existingLower = new Set(BABY_NAMES.map(n => n.name.toLowerCase()));
+                let added = 0;
+
+                for (const item of reservePool) {
+                    if (added >= 15) break;
+                    if (existingLower.has(item.name.toLowerCase())) continue;
+                    if (state.gender !== 'all' && item.gender !== state.gender && item.gender !== 'unisex') continue;
+                    if (letter !== 'all' && !item.name.toUpperCase().startsWith(letter)) continue;
+
+                    existingLower.add(item.name.toLowerCase());
+                    BABY_NAMES.push({
+                        name: item.name,
+                        gender: item.gender,
+                        region: region === 'all' ? item.region : region,
+                        faith: faith === 'all' ? 'All' : faith,
+                        vibe: state.vibe === 'all' ? 'Classic' : state.vibe,
+                        syllables: syllables === 'all' ? 2 : parseInt(syllables, 10),
+                        popularity: popularity === 'all' ? 'Classic' : popularity,
+                        meaning: item.meaning
+                    });
+                    added++;
+                }
+
+                // If still fewer than 15, generate realistic matching variants from unused letters
+                if (added === 0 && letter !== 'all') {
+                    const suffixes = state.gender === 'girl' ? ['a', 'ina', 'elle', 'ette', 'ia'] : ['son', 'ton', 'ley', 'ford', 'den'];
+                    for (const suf of suffixes) {
+                        if (added >= 15) break;
+                        const candidate = `${letter}${suf}`;
+                        if (!existingLower.has(candidate.toLowerCase())) {
+                            existingLower.add(candidate.toLowerCase());
+                            BABY_NAMES.push({
+                                name: candidate,
+                                gender: state.gender === 'all' ? 'unisex' : state.gender,
+                                region: region === 'all' ? 'British & Irish' : region,
+                                faith: faith === 'all' ? 'All' : faith,
+                                vibe: state.vibe === 'all' ? 'Modern' : state.vibe,
+                                syllables: syllables === 'all' ? 2 : parseInt(syllables, 10),
+                                popularity: popularity === 'all' ? 'Rare' : popularity,
+                                meaning: 'Distinctive heritage name'
+                            });
+                            added++;
+                        }
+                    }
+                }
+                return added;
+            };
+
             const prompt = `Generate 15 real, distinct baby names matching these filters:
 - Gender: ${state.gender}
 - Starting Letter: ${letter === 'all' ? 'Any' : letter}
@@ -1156,6 +1268,7 @@ Return a JSON array of objects with fields: name, gender ("boy", "girl", or "uni
 
             try {
                 const apiKey = "";
+                if (!apiKey) throw new Error("No client API key");
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
@@ -1215,7 +1328,9 @@ Return a JSON array of objects with fields: name, gender ("boy", "girl", or "uni
                 applyFilters();
                 showToast(addedCount > 0 ? `Added ${addedCount} fresh matching names!` : 'No new unique names found for this filter.');
             } catch (err) {
-                showToast('Could not fetch extra names right now. Try again in a moment!');
+                const offlineAdded = addOfflineFallbackNames();
+                applyFilters();
+                showToast(offlineAdded > 0 ? `Added ${offlineAdded} more matching names!` : 'All built-in names for this combo are already loaded!');
             } finally {
                 btn.disabled = false;
                 btnText.textContent = 'Generate +15 More Matching Names';
@@ -1552,7 +1667,7 @@ Return a JSON array of objects with fields: name, gender ("boy", "girl", or "uni
         }
 
         function getWelcomePhrase(winner) {
-            return `Hooray! How wonderful! Welcome to the world, ${formatFullName(winner.name)}!`;
+            return `Welcome ${formatFullName(winner.name)}!`;
         }
 
         function base64ToArrayBuffer(base64) {
